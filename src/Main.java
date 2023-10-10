@@ -6,32 +6,43 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter your name");
-        String userName = scanner.nextLine();
-
-        System.out.println("Are you an administrator or a student?");
-
-        String userType = scanner.nextLine();
-        do {
-        if (userType.equals("administrator")) {
-            System.out.println("Choose one of the following facilities:");
-            System.out.println("1. Add a new course");
-            System.out.println("2. Edit an existing course");
-            System.out.println("3. Add or remove an instructor");
-            System.out.println("4. Categorize courses by department");
-         //   System.out.println("5. Track student enrollment");
-            System.out.println("6. Calculate students' GPA");
-
-
-            // Perform the selected operation
-        } /*else if (userType.equals("student")) {
-            // Perform student operations
-        } else {
-            System.out.println("Invalid user type");
-        }*/
-        int choice = scanner.nextInt();
+        String userName = scanner.next();
 
         Administrator administrator = new Administrator(userName);
-        Student student = new Student();
+        Student student = new Student(userName);
+        System.out.println("Are you an administrator or a student?");
+
+        String userType = scanner.next();
+        do {
+                if (userType.equals("administrator")) {
+                    System.out.println("Choose one of the following facilities:");
+                    System.out.println("1. Add a new course");
+                    System.out.println("2. Edit an existing course");
+                    System.out.println("3. Add or remove an instructor");
+                    System.out.println("4. Categorize courses by department");
+                    //   System.out.println("5. Track student enrollment");
+                    System.out.println("6. Calculate students' GPA");
+
+
+                    // Perform the selected operation
+                } else if (userType.equals("student")) {
+                    // Perform student operations
+                    System.out.println("Choose one of the following facilities:");
+                    System.out.println("1. Browse and view a list of available courses");
+                    System.out.println("2. Search for a course based on specific criteria");
+                    System.out.println("3. View detailed information about a specific course");
+                    System.out.println("4. View the schedule of classes for a specific course");
+                    System.out.println("5. Mark courses as favourites");
+                    System.out.println("6. Enroll in a class");
+                    System.out.println("7. View your class grades");
+                    System.out.println("7. View school academic calender");
+                    System.out.println("8. Access historical class schedules and academic performance records");
+                } else {
+                    System.out.println("Invalid input. Enter the user type again");
+                    userType = scanner.next();
+                }
+
+        int choice = scanner.nextInt();
 
 
         switch (choice) {
@@ -85,14 +96,16 @@ public class Main {
                 }
                 break;
             case 4:
-                System.out.println("Enter the name of the department:");
-                String departmentName = scanner.next();
-                administrator.printCoursesInDepartment(administrator.courses,departmentName);
+               // System.out.println("Enter the name of the department:");
+                //String departmentName = scanner.next();
+               // administrator.printCoursesInDepartment(administrator.getCourses(),departmentName);
+                System.out.println("Here is the result of the categorization:");
+                System.out.println(administrator.arrangeCoursesByDepartment(administrator.getCourses()));
                 break;
           //  case 5:
           //      break;
             case 6:
-                administrator.calculateGPA(student.students);
+                administrator.calculateGPA(student);
                 break;
 
             default:

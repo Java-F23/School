@@ -1,7 +1,9 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 public class Administrator {
-    public ArrayList<Course> courses;
+
+    private ArrayList<Course> courses;
     private ArrayList<Faculty> instructors;
     private ArrayList<String> departments;
     private String name;
@@ -17,6 +19,10 @@ public class Administrator {
     public void setName(String name) {
         this.name = name;
     }
+
+    public ArrayList<Course> getCourses() {
+        return courses;
+    }
     public void addCourse( String title, String subject, String instructor, String level, String content, String department) {
         Scanner scanner = new Scanner(System.in);
 
@@ -27,6 +33,12 @@ public class Administrator {
         Course newCourse = new Course(title,subject,instructor,level,content,department);
         courses.add(newCourse);
         System.out.println("New course added successfully!");
+        for (Course course : courses)
+        {
+            System.out.println(course.getTitle());
+        }
+
+
     }
 
     public void editCourse(String title, String subject, String instructor,String level, String content, String department) {
@@ -94,19 +106,35 @@ public class Administrator {
         }
     }
 
-   /* public void trackstudents(ArrayList<Student>students)
+    public HashMap<String, ArrayList<Course>> arrangeCoursesByDepartment(ArrayList<Course> courses) {
+            HashMap<String, ArrayList<Course>> coursesByDepartment = new HashMap<String, ArrayList<Course>>();
+
+            for (Course course : courses) {
+                String department = course.getDepartment();
+                if (!coursesByDepartment.containsKey(department)) {
+                    coursesByDepartment.put(department, new ArrayList<Course>());
+                }
+                coursesByDepartment.get(department).add(course);
+            }
+
+            return coursesByDepartment;
+    }
+
+
+
+
+
+    /* public void trackstudents(ArrayList<Student>students)
     {
 
     }
 */
-    public ArrayList<Double>  calculateGPA (ArrayList<Student>students)
+    public Double  calculateGPA (Student student)
     {
-        ArrayList<Double> gpas = new ArrayList<Double>();
 
-        for (Student student : students) {
-            gpas.add(student.getTotalGradePoints()/student.getTotalCredits());
-        }
-        return gpas;
+            double gpa = (student.getTotalGradePoints()/student.getTotalCredits());
+
+        return gpa;
     }
 
 }

@@ -2,17 +2,13 @@ import java.util.ArrayList;
 
 public class Student {
     private String name;
-
     private String enrolledClasses;
-
     private double totalCredits;
-
-
     private double totalGradePoints;
 
-    public ArrayList<Student> students;
-
-
+    public Student(String name) {
+        this.name = name;
+    }
     public String getName() {
         return name;
     }
@@ -40,7 +36,19 @@ public class Student {
         return totalGradePoints;
     }
 
-    public void setTotalGradePoints(double totalGradePoints) {
+    public void setTotalGradePoints(double totalGradePoints)
+    {
         this.totalGradePoints = totalGradePoints;
     }
+
+    public void viewAvailableCourses(Administrator administrator) {
+        ArrayList<Course> availableCourses = administrator.getCourses();
+        System.out.println("Available Courses:");
+        for (Course course : availableCourses) {
+            System.out.println(administrator.getCourses());
+        }
+    }
+
+
+
 }
