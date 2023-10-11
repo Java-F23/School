@@ -10,6 +10,8 @@ public class Administrator {
     public Administrator(String name) {
         this.name = name;
         courses = new ArrayList<Course>();
+        courses.add(new Course("Intro to Java","Java","Ashraf", "undergrad","Programming language","CS"));
+        courses.add(new Course("C++ Fundamentals","C++","Ahmed", "undergrad","Programming language","CS"));
         instructors = new ArrayList<Faculty>();
         departments = new ArrayList<String>();
     }
@@ -136,5 +138,23 @@ public class Administrator {
 
         return gpa;
     }
+
+
+    public ArrayList<Course> searchCourses(String title, String subject, String instructor, String department, String level, String content) {
+        ArrayList<Course> availableCourses = getCourses();
+        ArrayList<Course> matchedCourses = new ArrayList<>();
+        for (Course course : availableCourses) {
+            if ((title == null || course.getTitle().equals(title)) &&
+                    (subject == null || course.getSubject().equals(subject)) &&
+                    (instructor == null || course.getInstructor().equals(instructor)) &&
+                    (department == null || course.getDepartment().equals(department)) &&
+                    (level == null || course.getLevel().equals(level)) &&
+                    (content == null || course.getContent().equals(content))) {
+                matchedCourses.add(course);
+            }
+        }
+        return matchedCourses;
+    }
+
 
 }

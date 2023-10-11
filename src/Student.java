@@ -41,13 +41,32 @@ public class Student {
         this.totalGradePoints = totalGradePoints;
     }
 
+
+
+
     public void viewAvailableCourses(Administrator administrator) {
         ArrayList<Course> availableCourses = administrator.getCourses();
-        System.out.println("Available Courses:");
+        System.out.println("Available Courses are:");
+        System.out.println("Course Title        Course Subject");
+
         for (Course course : availableCourses) {
-            System.out.println(administrator.getCourses());
+            System.out.println(course.getSubject() + "                  " + course.getTitle());
         }
     }
+    public void searchAndPrintCourses(Administrator administrator, String title, String subject, String instructor, String department, String level, String content) {
+        ArrayList<Course> matchedCourses = administrator.searchCourses(title, subject, instructor, department, level, content);
+        System.out.println("Matched Available Courses:");
+        if (matchedCourses.isEmpty()) {
+            System.out.println("No courses found.");
+        } else {
+            for (Course course : matchedCourses) {
+                System.out.println(course.getSubject() + " - " + course.getTitle());
+            }
+        }
+        System.out.println("\nAll Available Courses:");
+        viewAvailableCourses(administrator);
+    }
+
 
 
 
