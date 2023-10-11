@@ -50,21 +50,34 @@ public class Student {
         System.out.println("Course Title        Course Subject");
 
         for (Course course : availableCourses) {
-            System.out.println(course.getSubject() + "                  " + course.getTitle());
+            System.out.println(course.getTitle() + "                  " + course.getSubject());
         }
     }
+
+
     public void searchAndPrintCourses(Administrator administrator, String title, String subject, String instructor, String department, String level, String content) {
-        ArrayList<Course> matchedCourses = administrator.searchCourses(title, subject, instructor, department, level, content);
-        System.out.println("Matched Available Courses:");
-        if (matchedCourses.isEmpty()) {
-            System.out.println("No courses found.");
-        } else {
-            for (Course course : matchedCourses) {
-                System.out.println(course.getSubject() + " - " + course.getTitle());
+        ArrayList<Course> availableCourses = administrator.getCourses();
+        ArrayList<Course> matchedCourses = new ArrayList<>();
+        for (Course course : availableCourses) {
+            if ((title == null || course.getTitle().equals(title)) &&
+                    (subject == null || course.getSubject().equals(subject)) &&
+                    (instructor == null || course.getInstructor().equals(instructor)) &&
+                    (department == null || course.getDepartment().equals(department)) &&
+                    (level == null || course.getLevel().equals(level)) &&
+                    (content == null || course.getContent().equals(content))) {
+                matchedCourses.add(course);
+                System.out.println(title);
             }
         }
-        System.out.println("\nAll Available Courses:");
-        viewAvailableCourses(administrator);
+        if (matchedCourses.isEmpty()) {
+            System.out.println("No courses found.");
+            System.out.println(title);
+        } else {
+            System.out.println("Matched Available Courses:");
+            for (Course course : matchedCourses) {
+                System.out.println( course.getTitle());
+            }
+        }
     }
 
 

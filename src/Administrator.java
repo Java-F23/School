@@ -140,21 +140,7 @@ public class Administrator {
     }
 
 
-    public ArrayList<Course> searchCourses(String title, String subject, String instructor, String department, String level, String content) {
-        ArrayList<Course> availableCourses = getCourses();
-        ArrayList<Course> matchedCourses = new ArrayList<>();
-        for (Course course : availableCourses) {
-            if ((title == null || course.getTitle().equals(title)) &&
-                    (subject == null || course.getSubject().equals(subject)) &&
-                    (instructor == null || course.getInstructor().equals(instructor)) &&
-                    (department == null || course.getDepartment().equals(department)) &&
-                    (level == null || course.getLevel().equals(level)) &&
-                    (content == null || course.getContent().equals(content))) {
-                matchedCourses.add(course);
-            }
-        }
-        return matchedCourses;
-    }
+
 
 
 }

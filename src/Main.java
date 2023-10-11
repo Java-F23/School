@@ -1,4 +1,8 @@
 import java.util.Scanner;
+//To use BufferedReader
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 
 public class Main {
 
@@ -113,7 +117,7 @@ public class Main {
                             student.viewAvailableCourses(administrator);
 
                             break;
- /*                       case 2:
+                        case 2:
                             Scanner scanner2 = new Scanner(System.in);
                             System.out.println("Enter the parameter to search for (title, subject, instructor, department, level, or content):");
                             String parameter = scanner2.next();
@@ -125,7 +129,8 @@ public class Main {
                             String content = null;
                             if (parameter.equals("title")) {
                                 System.out.println("Enter the title to search for:");
-                                title = scanner2.next();
+                                title = scanner2.nextLine();
+
                             } else if (parameter.equals("subject")) {
                                 System.out.println("Enter the subject to search for:");
                                 subject = scanner2.next();
@@ -140,13 +145,13 @@ public class Main {
                                 level = scanner2.next();
                             } else if (parameter.equals("content")) {
                                 System.out.println("Enter the content to search for:");
-                                content = scanner2.next();
+                                content = scanner2.nextLine();
                             }
                             student.searchAndPrintCourses(administrator, title, subject, instructor, department, level, content);
 
 
                             break;
-                        case 3:
+/*                        case 3:
                             System.out.println("Enter 'add' to add an instructor or 'remove' to remove an instructor:");
                             String action = scanner.next();
                             if (action.equals("add")) {
