@@ -9,6 +9,7 @@ public class Student {
     public Student(String name) {
         this.name = name;
     }
+    private int counter; //used for getCourseDetails
     public String getName() {
         return name;
     }
@@ -66,12 +67,11 @@ public class Student {
                     (level == null || course.getLevel().equals(level)) &&
                     (content == null || course.getContent().equals(content))) {
                 matchedCourses.add(course);
-                System.out.println(title);
             }
         }
         if (matchedCourses.isEmpty()) {
             System.out.println("No courses found.");
-            System.out.println(title);
+           System.out.println(title);
         } else {
             System.out.println("Matched Available Courses:");
             for (Course course : matchedCourses) {
@@ -79,6 +79,23 @@ public class Student {
             }
         }
     }
+
+    public void getCourseDetails(Administrator administrator,String courseTitle) {
+        for (Course course : administrator.getCourses()) {
+            if (course.getTitle().equals(courseTitle)) {
+                System.out.println( "Title: " + course.getTitle() + "\nSubject: " + course.getSubject() + "\nInstructor: " + course.getInstructor() + "\nDepartment: " + course.getDepartment() + "\nLevel: " + course.getLevel() + "\nContent: " + course.getContent());
+                counter = 1;
+            }
+
+        }
+            if(counter !=1)
+            {
+                 //to make sure that it did not enter the first if statement since it loops on all the available courses
+                {System.out.println("Course is not found.");}
+            }
+
+    }
+
 
 
 

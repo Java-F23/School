@@ -1,7 +1,5 @@
 import java.util.Scanner;
-//To use BufferedReader
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.lang.Thread;
 
 
 public class Main {
@@ -129,8 +127,7 @@ public class Main {
                             String content = null;
                             if (parameter.equals("title")) {
                                 System.out.println("Enter the title to search for:");
-                                title = scanner2.nextLine();
-
+                                title = scanner2.next();
                             } else if (parameter.equals("subject")) {
                                 System.out.println("Enter the subject to search for:");
                                 subject = scanner2.next();
@@ -151,24 +148,14 @@ public class Main {
 
 
                             break;
-/*                        case 3:
-                            System.out.println("Enter 'add' to add an instructor or 'remove' to remove an instructor:");
-                            String action = scanner.next();
-                            if (action.equals("add")) {
-                                System.out.println("Enter the name of the instructor:");
-                                String name = scanner.next();
-                                System.out.println("Enter the qualification of the instructor:");
-                                String qualification = scanner.next();
-                                administrator.addInstructor(name, qualification);
-                            } else if (action.equals("remove")) {
-                                System.out.println("Enter the name of the instructor to be removed:");
-                                String name = scanner.next();
-                                administrator.removeInstructor(name);
-                            } else {
-                                System.out.println("Invalid action");
-                            }
+                        case 3:
+                            System.out.println("Enter the course title: ");
+                            String courseTitle = scanner.next();
+
+
+                            student.getCourseDetails(administrator,courseTitle);
                             break;
-                        case 4:
+  /*                      case 4:
                             // System.out.println("Enter the name of the department:");
                             //String departmentName = scanner.next();
                             // administrator.printCoursesInDepartment(administrator.getCourses(),departmentName);

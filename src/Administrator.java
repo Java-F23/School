@@ -10,8 +10,8 @@ public class Administrator {
     public Administrator(String name) {
         this.name = name;
         courses = new ArrayList<Course>();
-        courses.add(new Course("Intro to Java","Java","Ashraf", "undergrad","Programming language","CS"));
-        courses.add(new Course("C++ Fundamentals","C++","Ahmed", "undergrad","Programming language","CS"));
+        courses.add(new Course("IntroToJava","Java","Ashraf", "undergrad","Programming language","CS"));
+        courses.add(new Course("C++Fundamentals","C++","Ahmed", "undergrad","Programming language","CS"));
         instructors = new ArrayList<Faculty>();
         departments = new ArrayList<String>();
     }
