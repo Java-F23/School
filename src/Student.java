@@ -1,13 +1,35 @@
 import java.util.ArrayList;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 
 public class Student {
     private String name;
+    private String course;
     private String enrolledClasses;
     private double totalCredits;
     private double totalGradePoints;
 
-    public Student(String name) {
+    private ArrayList<String> favoriteCourses;
+
+    private ArrayList<String> MyCourses;  //includes courses that student enrolled in
+
+    //events and dates are related to the calendar
+    private ArrayList<String> events;
+    private ArrayList<String> dates;
+    private ArrayList<String> history;  //includes the courses that student took in previous years and his grades
+
+
+
+    public Student(String name, String course) {
         this.name = name;
+        this.course = course;
+        favoriteCourses = new ArrayList<>();
+        MyCourses = new ArrayList<>();
+        MyCourses.add(course);
+        events = new ArrayList<>();
+        dates = new ArrayList<>();
+        history = new ArrayList<>();
     }
     private int counter; //used for getCourseDetails
     public String getName() {
@@ -37,6 +59,25 @@ public class Student {
         return totalGradePoints;
     }
 
+    public ArrayList<String> getMyCourses() {
+        return MyCourses;
+
+    }
+
+
+    public void setHistory(String course, String grade) {
+        history.add(course + ": " + grade);
+    }
+    public void setMyCourses(int index,String myCourse) {
+        //  MyCourses.set(index,myCourses);
+
+        if (MyCourses.size() <= index) {
+            MyCourses.add(myCourse);
+        } else {
+            MyCourses.set(index, myCourse);
+        }
+
+    }
     public void setTotalGradePoints(double totalGradePoints)
     {
         this.totalGradePoints = totalGradePoints;
@@ -96,8 +137,119 @@ public class Student {
 
     }
 
+    public void printCourseSchedule(Administrator administrator,String courseTitle) {
+        for (Course course : administrator.getCourses()) {
+            if (course.getTitle().equals(courseTitle)) {
+                System.out.println("Course Schedule:");
+                System.out.println("Day: " + course.getDay());
+                System.out.println("Time: " + course.getTime().format(DateTimeFormatter.ofPattern("hh:mm")));
+                return;  //to end the function if the course is found
+            }
+        }
+        System.out.println("Course not found.");
+    }
+
+    public void addFavoriteCourse(String title) {
+        favoriteCourses.add(title);
+        System.out.println("The course is added to the fav list successfully!");
+    }
+
+    public void printFavoriteCourses() {
+        if (favoriteCourses.isEmpty()) {
+            System.out.println("No favorite courses.");
+        } else {
+            System.out.println("Favorite courses:");
+            for (String favoriteCourse : favoriteCourses) {
+                System.out.println(favoriteCourse);
+            }
+        }
+    }
+    public void enrollInCourse(String title) {
+        MyCourses.add(title);
+        System.out.println("The course is added to the fav list successfully!");
+    }
+
+    public void printMyCourses() {
+        if (MyCourses.isEmpty()) {
+            System.out.println("No enrolled courses.");
+        } else {
+            System.out.println("Enrolled courses:");
+            for (String myCourses : MyCourses) {
+                System.out.println(myCourses);
+            }
+        }
+    }
+    public void viewGrades(Administrator administrator, String studentName) {
+        Student student = null;
+        for (Student s : administrator.getStudents()) {
+            if (s.getName().equals(studentName)) {
+                student = s;
+                break;
+            }
+        }
+        if (student == null) {
+            System.out.println("Student not found.");
+        } else {
+            System.out.println("Grades and academic progress for enrolled courses:");
+            ArrayList<String> assignments = new ArrayList<>();
+            for (String mycourse : student.getMyCourses()) {
+                for (Course availableCourse : administrator.getCourses()) {
+                    if (availableCourse.getTitle().equals(mycourse)) {
+                        assignments = availableCourse.getAssignments();
+                    }
+                }
+                if (assignments.isEmpty()) {
+                    System.out.println(mycourse + ": No assignments found.");
+                } else {
+                    double totalScore = student.getTotalGradePoints();
+                    double maxScore = assignments.size() * 100;
+                    double progress = totalScore / maxScore * 100;
+                    System.out.printf("%s: Progress: %.2f%%\n", mycourse, progress);
+                }
+            }
+        }
+    }
+    public void Calendar() {
+        // Adding important dates to the calendar
+        events.add("First day of classes");
+        dates.add("1/9/2023");
+
+        events.add("Armed Forces Day");
+        dates.add("6/10/2023");
+
+        events.add("Thanksgiving");
+        dates.add("23/11/2023");
+
+        events.add("Final exam starting");
+        dates.add("15/12/2023");
+        System.out.println("Event\t\t\t\t\t\tDate");
+        for (int i = 0; i < events.size(); i++) {
+            System.out.println(String.format("%-25s %10s", events.get(i), dates.get(i)));
 
 
+        }
+    }
 
+
+    public void printHistory(Administrator administrator, String studentName) {
+        Student student = null;
+        for (Student s : administrator.getStudents()) {
+            if (s.getName().equals(studentName)) {
+                student = s;
+                break;
+            }
+        }
+        if (student == null) {
+            System.out.println("Student not found.");
+        } else {
+            System.out.println("Course History:");
+            System.out.println("Course\t\t\tGrade");
+            for (String course : student.history) {
+                String[] parts = course.split(": ");
+                System.out.println((parts[0] + "\t\t\t" + parts[1]));
+            }
+        }
+
+    }
 
 }
