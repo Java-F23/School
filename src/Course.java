@@ -100,6 +100,7 @@ public class Course {
         getAssignments().add(assignments);
     }
 
+
     @Override
     public String toString() {
         return title;

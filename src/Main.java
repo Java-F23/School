@@ -145,6 +145,7 @@ public class Main {
                                     System.out.println("Choose the option number:");
                                     System.out.println("1. Add an assignment");
                                     System.out.println("2. Remove an assignment");
+                                    System.out.println("3. Display assignment");
                                     option = scanner.nextInt();
                                     administrator.manageAssignments(courseTitle, option);
                                     counter=1;  //to know that the course is available
@@ -272,7 +273,7 @@ public class Main {
 
                             break;
                         case 8:
-                            student.printMyCourses();
+                            student.printMyCourses(administrator,userName);
                             break;
                         case 9:
                             student.viewGrades(administrator,userName);

@@ -116,7 +116,8 @@ public class Student {
         } else {
             System.out.println("Matched Available Courses:");
             for (Course course : matchedCourses) {
-                System.out.println( course.getTitle());
+                System.out.println( "Course Title: " + course.getTitle() + " Course Subject: " + course.getSubject()+ " Course Instructor: " + course.getInstructor()+ " Course Department: " + course.getDepartment() + " Course Level:" + course.getLevel()+"Course Content:" +course.getContent() );
+
             }
         }
     }
@@ -166,16 +167,27 @@ public class Student {
     }
     public void enrollInCourse(String title) {
         MyCourses.add(title);
-        System.out.println("The course is added to the fav list successfully!");
+        System.out.println("You enrolled the course successfully!");
     }
 
-    public void printMyCourses() {
-        if (MyCourses.isEmpty()) {
-            System.out.println("No enrolled courses.");
+    public void printMyCourses(Administrator administrator, String studentName) {
+        Student student = null;
+        for (Student s : administrator.getStudents()) {
+            if (s.getName().equals(studentName)) {
+                student = s;
+                break;
+            }
+        }
+        if (student == null) {
+            System.out.println("Student not found.");
         } else {
-            System.out.println("Enrolled courses:");
-            for (String myCourses : MyCourses) {
-                System.out.println(myCourses);
+            if (student.MyCourses.isEmpty()) {
+                System.out.println("No enrolled courses.");
+            } else {
+                System.out.println("Enrolled courses:");
+                for (String myCourses : student.MyCourses) {
+                    System.out.println(myCourses);
+                }
             }
         }
     }

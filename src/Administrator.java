@@ -9,16 +9,8 @@ public class Administrator {
     private ArrayList<Faculty> instructors;
     private ArrayList<String> departments;
     private ArrayList<Student> students;
-
-
     private String name;
 
-    public void setStudents(Student student) {
-        students.add(student);
-    }
-    public ArrayList<Student> getStudents() {
-        return students;
-    }
 
     public Administrator(String name) {
         this.name = name;
@@ -38,9 +30,12 @@ public class Administrator {
         instructors = new ArrayList<Faculty>();
         departments = new ArrayList<String>();
 
-
-
-
+    }
+    public void setStudents(Student student) {
+        students.add(student);
+    }
+    public ArrayList<Student> getStudents() {
+        return students;
     }
     public String getName() {
         return name;
@@ -156,8 +151,8 @@ public class Administrator {
             int count = 0;
             for ( Student student : students) {
                 if (student.getMyCourses().contains(course.getTitle())) {
-                    System.out.println(student.getName());
-                    System.out.println(student.getMyCourses());
+                    //System.out.println(student.getName());
+                    //System.out.println(student.getMyCourses());
                     count++;
                 }
             }
@@ -263,6 +258,21 @@ public class Administrator {
                     }
                 }
                 break;
+            case 3:
+                Scanner scanner3 = new Scanner(System.in);
+               // System.out.println("Enter course name");
+               // String CourseName=scanner3.next();
+
+                for (Course c : courses) {
+                    if (c.getTitle().equals(courseTitle) )
+                    {
+                        System.out.println("Assignments for " + courseTitle + ":");
+                        System.out.println(c.getAssignments());
+                    }
+
+                }
+                break;
+
             default:
                 System.out.println("Invalid choice.");
                 }
