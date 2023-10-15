@@ -258,10 +258,9 @@ public class Administrator {
                     }
                 }
                 break;
+            //Display the assignments for this course
             case 3:
                 Scanner scanner3 = new Scanner(System.in);
-               // System.out.println("Enter course name");
-               // String CourseName=scanner3.next();
 
                 for (Course c : courses) {
                     if (c.getTitle().equals(courseTitle) )

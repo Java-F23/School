@@ -169,7 +169,6 @@ public class Student {
         MyCourses.add(title);
         System.out.println("You enrolled the course successfully!");
     }
-
     public void printMyCourses(Administrator administrator, String studentName) {
         Student student = null;
         for (Student s : administrator.getStudents()) {

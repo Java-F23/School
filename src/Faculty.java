@@ -2,8 +2,6 @@ public class Faculty {
 
     private String name;
     private String qualification;
-
-
     public Faculty(String name,String qualification) {
         this.name = name;
         this.qualification = qualification;
