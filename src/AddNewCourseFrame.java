@@ -109,7 +109,7 @@ public class AddNewCourseFrame extends JFrame {
 
                 if (error <= 0 && error2<=0)
                 {
-                    CommonData.addCourseToTable(courseTableModel, title, courseName, instructor, content, department, selectedDays, selectedTime, level);
+                    CommonData.addCourseToTable( title, courseName, instructor, content, department, selectedDays, selectedTime, level);
                     JOptionPane.showMessageDialog(AddNewCourseFrame.this,"Course added successfully");
                     dispose();
                 }

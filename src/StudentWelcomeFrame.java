@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class StudentWelcomeFrame extends JFrame {
 
@@ -8,11 +9,22 @@ public class StudentWelcomeFrame extends JFrame {
     private JMenu menu;
     private JButton logoutButton;
     private JLabel welcomeLabel;
+
+    private JTable courseTable;
+
     public StudentWelcomeFrame(String name) {
         setTitle("Home Page");
-        setSize(500, 500);
+        setSize(1000, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+
+        // Initialize the table with data from CommonData
+        courseTable = new JTable(CommonData.courseTableModel);
+
+        JScrollPane scrollPane = new JScrollPane(courseTable);
+
+
+
 
 
         welcomeLabel = new JLabel("Welcome " + name + ", please choose one of the facilities:");
@@ -59,10 +71,14 @@ public class StudentWelcomeFrame extends JFrame {
         menu.add(menuItem10);
         menu.add(menuItem11);
 
+        JPanel mainpanel = new JPanel(new BorderLayout());
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        topPanel.add(welcomeLabel);
         menuItem1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                showCourseList();
+                topPanel.add(scrollPane);
             }
         });
 
@@ -137,10 +153,7 @@ public class StudentWelcomeFrame extends JFrame {
         });
 
 
-
-        JPanel mainpanel = new JPanel(new BorderLayout());
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        topPanel.add(welcomeLabel);
+        //topPanel.add(scrollPane);
         mainpanel.add(topPanel, BorderLayout.CENTER);
         mainpanel.add(logoutButton, BorderLayout.SOUTH);
 
@@ -149,4 +162,43 @@ public class StudentWelcomeFrame extends JFrame {
         setResizable(false);
         setVisible(true);
     }
+
+    private void showCourseList() {
+     //   ArrayList<Course2> courses = CommonData.getAvailableCourses();
+
+        // Create a frame and display the course list
+      //  JFrame courseListFrame = new JFrame("Available Courses");
+     //   courseListFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        // Create a JTable to display the courses
+      //  JTable courseTable = createCourseTable(courses);
+
+      //  JScrollPane scrollPane = new JScrollPane(courseTable);
+      //  courseListFrame.add(scrollPane);
+        courseTable.setModel(CommonData.courseTableModel);
+
+       // courseListFrame.pack();
+   //     courseListFrame.setVisible(true);
+    }
+
+    private JTable createCourseTable(ArrayList<Course2> courses) {
+        String[] columnNames = {"Title", "Subject", "Instructor", "Content", "Department", "Days", "Time", "Level"};
+        Object[][] data = new Object[courses.size()][8];
+
+        for (int i = 0; i < courses.size(); i++) {
+            Course2 course = courses.get(i);
+            data[i][0] = course.getTitle();
+            data[i][1] = course.getSubject();
+            data[i][2] = course.getInstructor();
+            data[i][3] = course.getContent();
+            data[i][4] = course.getDepartment();
+            data[i][5] = course.getDays();
+            data[i][6] = course.getTime();
+            data[i][7] = course.getLevel();
+        }
+
+        return new JTable(data, columnNames);
+    }
+
+
 }
