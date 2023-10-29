@@ -62,97 +62,77 @@ public class StudentWelcomeFrame extends JFrame {
         menuItem1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); // Close the current frame
-                BrowseCoursesFrame browseCoursesFrame = new BrowseCoursesFrame();
-               // browseCoursesFrame.setVisible(true); // Open the BrowseCoursesFrame
+
             }
         });
 
         menuItem2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); // Close the current frame
-                SearchCourseFrame searchCourseFrame = new SearchCourseFrame();
-              //  searchCourseFrame.setVisible(true); // Open the SearchCourseFrame
+
             }
         });
 
         menuItem3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); // Close the current frame
-                ViewDetailedInformationFrame viewDetailedInformationFrame = new ViewDetailedInformationFrame();
-             //   viewDetailedInformationFrame.setVisible(true); // Open the ViewDetailedInformationFrame
+
             }
         });
 
         menuItem4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); // Close the current frame
-                ViewScheduleOfClassFrame viewScheduleOfClassFrame = new ViewScheduleOfClassFrame();
-            //    viewScheduleOfClassFrame.setVisible(true); // Open the ViewScheduleOfClassFrame
+
             }
         });
 
         menuItem5.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); // Close the current frame
-                MarkCoursesAsFavouritesFrame markCoursesAsFavouritesFrame = new MarkCoursesAsFavouritesFrame();
-            //    markCoursesAsFavouritesFrame.setVisible(true); // Open the MarkCoursesAsFavouritesFrame
+
             }
         });
 
         menuItem6.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); // Close the current frame
-                PrintFavouriteCoursesList printFavouriteCoursesList = new PrintFavouriteCoursesList();
-             //   printFavouriteCoursesList.setVisible(true); // Open the PrintFavouriteCoursesList
+
             }
         });
 
         menuItem7.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); // Close the current frame
-                EnrollInAClass enrollInAClass = new EnrollInAClass();
-            //    enrollInAClass.setVisible(true); // Open the EnrollInAClass
+
             }
         });
 
         menuItem8.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); // Close the current frame
-                PrintMyCourses printMyCourses = new PrintMyCourses();
-            //    printMyCourses.setVisible(true); // Open the PrintMyCourses
+
             }
         });
 
         menuItem9.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); // Close the current frame
-                ViewYourClassGrades viewYourClassGrades = new ViewYourClassGrades();
-            //    viewYourClassGrades.setVisible(true); // Open the ViewYourClassGrades
+
             }
         });
 
         menuItem10.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); // Close the current frame
-                ViewSchoolAcademicCalendar viewSchoolAcademicCalendar = new ViewSchoolAcademicCalendar();
+
             }
         });
 
         menuItem11.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); // Close the current frame
-                HistoricalClassScheduleandRecords viewSchoolAcademicCalendar = new HistoricalClassScheduleandRecords();
+
             }
         });
 

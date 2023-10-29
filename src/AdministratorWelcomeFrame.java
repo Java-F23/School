@@ -55,60 +55,51 @@ public class AdministratorWelcomeFrame extends JFrame {
         menuItem1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Create an instance of AddNewCourseFrame
                 AddNewCourseFrame addNewCourseFrame = new AddNewCourseFrame();
-                dispose(); // Close the current frame
-                //addNewCourseFrame.setVisible(true); // Open the AddNewCourseFrame
+
+                // Make the AddNewCourseFrame visible
+                addNewCourseFrame.setVisible(true);
+
             }
         });
 
         menuItem2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                EditExistingCourseFrame editExistingCourseFrame = new EditExistingCourseFrame();
-                dispose(); // Close the current frame
-                //editExistingCourseFrame.setVisible(true); // Open the EditExistingCourseFrame
+
             }
         });
         menuItem3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AddOrRemoveInstructorFrame addOrRemoveInstructorFrame = new AddOrRemoveInstructorFrame();
-                dispose(); // Close the current frame
-                //addOrRemoveInstructorFrame.setVisible(true); // Open the AddOrRemoveInstructorFrame
+
             }
         });
 
         menuItem4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CategorizeCoursesByDepartmentFrame categorizeCoursesByDepartmentFrame = new CategorizeCoursesByDepartmentFrame();
-                dispose(); // Close the current frame
-                // categorizeCoursesByDepartmentFrame.setVisible(true); // Open the CategorizeCoursesByDepartmentFrame
+
             }
         });
         menuItem5.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TrackAndManageStudentEnrollmentFrame trackAndManageStudentEnrollmentFrame = new TrackAndManageStudentEnrollmentFrame();
-                dispose(); // Close the current frame
-                //trackAndManageStudentEnrollmentFrame.setVisible(true); // Open the TrackAndManageStudentEnrollmentFrame
+
             }
         });
 
         menuItem6.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TrackAndManageClassAssignmentFrame trackAndManageClassAssignmentFrame = new TrackAndManageClassAssignmentFrame();
-                dispose(); // Close the current frame
-                // trackAndManageClassAssignmentFrame.setVisible(true); // Open the TrackAndManageClassAssignmentFrame
+
             }
         });
         menuItem7.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CalculateStudentsGpa calculateStudentsGpa = new CalculateStudentsGpa();
-                dispose(); // Close the current frame
-                //calculateStudentsGpa.setVisible(true); // Open the CalculateStudentsGpa
+
             }
         });
 

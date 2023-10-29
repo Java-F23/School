@@ -50,7 +50,7 @@ public class LoginFrame extends JFrame {
                         }
 
                     }
-                } catch (Exception ex) {
+                } catch ( Exception ex) {
                     JOptionPane.showMessageDialog(LoginFrame.this,"Name is not valid");
                 }
             }
