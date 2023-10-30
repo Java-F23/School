@@ -1,7 +1,7 @@
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class Course {
+public class Course extends CommonData{
     private String title;
     private String subject;
     private String instructor;

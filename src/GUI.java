@@ -6,11 +6,14 @@ public class GUI {
         loginFrame.setVisible(true);
         CommonData.Level level = CommonData.Level.BEGINNER;
         ArrayList<CommonData.WorkingDays> days = new ArrayList<>();
-        days.add(CommonData.WorkingDays.MONDAY);
-        days.add(CommonData.WorkingDays.WEDNESDAY);
-        CommonData.addCourseToTable("Course Title2","Course Subject","Instructor Name","Course Content",CommonData.Department.MATH,days,CommonData.Time.At_08_30,level);
-        CommonData.addCourseToTable("Course Title33","Course Subject","Instructor Name","Course Content",CommonData.Department.MATH,days,CommonData.Time.At_08_30,level);
+        days.add(CommonData.WorkingDays.M);
+        days.add(CommonData.WorkingDays.W);
 
-        CommonData.addCourseToTable("Course Title","Course Subject","Instructor Name","Course Content",CommonData.Department.MATH,days,CommonData.Time.At_08_30,level);
+        //Example for the available courses
+        CommonData.addCourseToTable("Introduction to Programming", "Computer Science", "Dr. Smith", "Basics of programming", CommonData.Department.SCIENCE, days, CommonData.Time.At_08_30, CommonData.Level.BEGINNER);
+        CommonData.addCourseToTable("Database Management", "Information Systems", "Prof. Johnson", "Database design and management", CommonData.Department.SCIENCE, days, CommonData.Time.At_11_30, CommonData.Level.INTERMEDIATE);
+        CommonData.addCourseToTable("Advanced Calculus", "Mathematics", "Prof. Brown", "Advanced calculus concepts", CommonData.Department.MATH, days, CommonData.Time.At_13_30, CommonData.Level.ADVANCED);
+
+
     }
 }

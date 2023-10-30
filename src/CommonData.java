@@ -2,12 +2,16 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextArea;
+import javax.swing.*;
+import java.awt.*;
 
 
 public class CommonData {
     public static DefaultTableModel courseTableModel;
+    private JTable courseTable;
+
     public enum WorkingDays {
-       SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY;
+       U, M, T, W, R;
     }
 
     public enum Time {
@@ -26,8 +30,8 @@ public class CommonData {
     static {
         CommonData.Level level = CommonData.Level.BEGINNER;
         ArrayList<CommonData.WorkingDays> days = new ArrayList<>();
-        days.add(CommonData.WorkingDays.MONDAY);
-        days.add(CommonData.WorkingDays.WEDNESDAY);
+        days.add(CommonData.WorkingDays.M);
+        days.add(CommonData.WorkingDays.W);
         courseTableModel = new DefaultTableModel();
         courseTableModel.addColumn("Title");
         courseTableModel.addColumn("Subject");
@@ -37,6 +41,7 @@ public class CommonData {
         courseTableModel.addColumn("Days");
         courseTableModel.addColumn("Time");
         courseTableModel.addColumn("Level");
+        courseTableModel.addRow(new Object[]{"Title", "Subject", "Instructor", "Content", "Department", "Days", "Time", "Level"});
     }
 
 
@@ -46,27 +51,8 @@ public class CommonData {
         courseTableModel.addRow(new Object[]{title, subject, instructor, content, department, days, time, level});
     }
 
-    // Method to get available courses
-    public static ArrayList<Course2> getAvailableCourses() {
-        ArrayList<Course2> courses = new ArrayList<>();
 
-        for (int row = 0; row < courseTableModel.getRowCount(); row++) {
-            String title = courseTableModel.getValueAt(row, 0).toString();
-            String subject = courseTableModel.getValueAt(row, 1).toString();
-            String instructor = courseTableModel.getValueAt(row, 2).toString();
-            String content = courseTableModel.getValueAt(row, 3).toString();
-            Department department = (Department) courseTableModel.getValueAt(row, 4);
-            ArrayList<WorkingDays> days = (ArrayList<WorkingDays>) courseTableModel.getValueAt(row, 5);
-            Time time = (Time) courseTableModel.getValueAt(row, 6);
-            Level level = (Level) courseTableModel.getValueAt(row, 7);
 
-            Course2 course = new Course2(title, subject,department, days,time, level,instructor, content);
-            courses.add(course);
-
-            }
-
-        return courses;
-    }
 }
 
 
