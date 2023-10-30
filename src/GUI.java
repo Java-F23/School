@@ -13,7 +13,5 @@ public class GUI {
         CommonData.addCourseToTable("Introduction to Programming", "Computer Science", "Dr. Smith", "Basics of programming", CommonData.Department.SCIENCE, days, CommonData.Time.At_08_30, CommonData.Level.BEGINNER);
         CommonData.addCourseToTable("Database Management", "Information Systems", "Prof. Johnson", "Database design and management", CommonData.Department.SCIENCE, days, CommonData.Time.At_11_30, CommonData.Level.INTERMEDIATE);
         CommonData.addCourseToTable("Advanced Calculus", "Mathematics", "Prof. Brown", "Advanced calculus concepts", CommonData.Department.MATH, days, CommonData.Time.At_13_30, CommonData.Level.ADVANCED);
-
-
     }
 }

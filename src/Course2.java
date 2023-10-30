@@ -9,6 +9,7 @@ public class Course2 extends CommonData {
     private Level level;
     private String instructor;
     private String content;
+    private ArrayList<String> enrolledStudents;
 
     public Course2(String title, String subject, Department department, ArrayList<WorkingDays> days, Time time, Level level, String instructor, String content) {
         this.title = title;
@@ -19,6 +20,7 @@ public class Course2 extends CommonData {
         this.level = level;
         this.instructor = instructor;
         this.content = content;
+        this.enrolledStudents = new ArrayList<>();
     }
 
     public void setTitle(String title) {
@@ -52,6 +54,9 @@ public class Course2 extends CommonData {
     public void setContent(String content) {
         this.content = content;
     }
+    public void enrollStudent(String studentName) {
+        enrolledStudents.add(studentName);
+    }
 
     public String getTitle() {
         return title;
@@ -83,6 +88,9 @@ public class Course2 extends CommonData {
 
     public String getContent() {
         return content;
+    }
+    public ArrayList<String> getEnrolledStudents() {
+        return enrolledStudents;
     }
 }
 

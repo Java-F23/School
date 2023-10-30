@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 
 public class StudentWelcomeFrame extends JFrame {
@@ -9,8 +10,9 @@ public class StudentWelcomeFrame extends JFrame {
     private JMenu menu;
     private JButton logoutButton;
     private JLabel welcomeLabel;
-
     private JTable courseTable;
+    private ArrayList<Course2> favoriteCourses = new ArrayList<>();
+
 
     public StudentWelcomeFrame(String name) {
         setTitle("Home Page");
@@ -36,7 +38,6 @@ public class StudentWelcomeFrame extends JFrame {
                 loginFrame.setVisible(true); // Open the login frame
             }
         });
-
 
         JMenuItem menuItem1 = new JMenuItem("Browse and view a list of available courses");
         JMenuItem menuItem2 = new JMenuItem("Search for a course based on specific criteria");
@@ -89,95 +90,152 @@ public class StudentWelcomeFrame extends JFrame {
             }
         });
 
-
-
         menuItem2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String[] searchOptions = {"Title", "Subject", "Instructor", "Department"};
 
+                // Prompt the user to choose a search option
+                String selectedOption = (String) JOptionPane.showInputDialog(
+                        null, "Select a search option:", "Search Course",
+                        JOptionPane.QUESTION_MESSAGE, null, searchOptions, searchOptions[0]
+                );
+
+                if (selectedOption != null) {
+                    // Prompt the user to enter the search term
+                    String searchTerm = JOptionPane.showInputDialog("Enter the " + selectedOption + " to search for:");
+
+                    if (searchTerm != null && !searchTerm.isEmpty()) {
+                        Course2 foundCourse = CommonData.searchCourseByCriteria(searchTerm, selectedOption);
+                        if (foundCourse != null) {
+                            // Display course details
+                            String courseDetails = "Course Title: " + foundCourse.getTitle() + "\nCourse Subject: " + foundCourse.getSubject()
+                                    + "\nInstructor: " + foundCourse.getInstructor() + "\nContent: " + foundCourse.getContent()
+                                    + "\nDepartment: " + foundCourse.getDepartment();
+
+                            // Retrieve and append additional attributes to courseDetails
+                            // ...
+
+                            JOptionPane.showMessageDialog(null, courseDetails, "Course Details", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            // Course not found
+                            JOptionPane.showMessageDialog(null, "Course not found.", "Not Found", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                }
             }
         });
-
 
         menuItem3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Prompt the user to enter a course title or subject
-                String searchTerm = JOptionPane.showInputDialog("Enter the course title or subject:");
+                String searchTerm = JOptionPane.showInputDialog("Enter the course title:");
 
                 if (searchTerm != null && !searchTerm.isEmpty()) {
-                    boolean courseFound = false;
-                    int rowIndex = -1;
-
-                    // Search for the course in the table
-                    try {
-                        for (int row = 0; row < courseTable.getRowCount(); row++) {
-                            String title = courseTable.getValueAt(row, 0).toString();
-                            String subject = courseTable.getValueAt(row, 1).toString();
-
-                            if (title.equalsIgnoreCase(searchTerm) || subject.equalsIgnoreCase(searchTerm)) {
-                                courseFound = true;
-                                rowIndex = row;
-                                break;
-                            }
-                        }
-                    } catch (Exception ex) {
-                        // Handle any unexpected exceptions during the search
-                        JOptionPane.showMessageDialog(null, "An error occurred while searching for the course.", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    if (courseFound) {
+                    Course2 foundCourse = CommonData.searchCourseByCriteria(searchTerm, "Title"); // Search by title
+                    if (foundCourse != null) {
                         // Display course details
-                        try {
-                            String courseTitle = courseTable.getValueAt(rowIndex, 0).toString();
-                            String courseSubject = courseTable.getValueAt(rowIndex, 1).toString();
-                            String courseInstructor = courseTable.getValueAt(rowIndex, 2).toString();
-                            String courseContent = courseTable.getValueAt(rowIndex, 3).toString();
-                            String courseDepartment = courseTable.getValueAt(rowIndex, 4).toString();
-                            // Add other details as needed
+                        String courseDetails = "Course Title: " + foundCourse.getTitle() + "\nCourse Subject: " + foundCourse.getSubject()
+                                + "\nInstructor: " + foundCourse.getInstructor() + "\nContent: " + foundCourse.getContent()
+                                + "\nDepartment: " + foundCourse.getDepartment()  + "\nDays: " + foundCourse.getDays()+ "\nTime: " + foundCourse.getTime()+  "\nLevel: " + foundCourse.getLevel() ;
 
-                            // Display the course details to the user
-                            JOptionPane.showMessageDialog(null, "Course Title: " + courseTitle + "\nCourse Subject: " + courseSubject
-                                            + "\nInstructor: " + courseInstructor + "\nContent: " + courseContent + "\nDepartment: " + courseDepartment,
-                                    "Course Details", JOptionPane.INFORMATION_MESSAGE);
-                        } catch (Exception ex) {
-                            // Handle any unexpected exceptions during the course details display
-                            JOptionPane.showMessageDialog(null, "An error occurred while displaying course details.", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
+                        JOptionPane.showMessageDialog(null, courseDetails, "Course Details", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        // Course not found
+                        JOptionPane.showMessageDialog(null, "Course not found.", "Not Found", JOptionPane.ERROR_MESSAGE);
+                    }
+                }else {
+
+                    // Course not found
+                    JOptionPane.showMessageDialog(null, "Enter valid input", "Input is not valid", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+        });
+
+
+        menuItem4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchTerm = JOptionPane.showInputDialog("Enter the course:");
+
+                if (searchTerm != null && !searchTerm.isEmpty()) {
+                    // Search for the course in the table
+                    Course2 foundCourse = CommonData.searchCourseByCriteria(searchTerm, "Title"); // Search by title
+
+                    if (foundCourse != null) {
+                        // Show the course details to the user
+                        JOptionPane.showMessageDialog(null, "Course Name: " + searchTerm + "\nCourse Days: " + foundCourse.getDays()
+                                + "\nCourse Time: " + foundCourse.getTime(), "Course Days and Time", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         // Course not found
                         JOptionPane.showMessageDialog(null, "Course not found.", "Not Found", JOptionPane.ERROR_MESSAGE);
                     }
                 }
-
-            }
-        });
-
-        menuItem4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
             }
         });
 
         menuItem5.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Prompt the user to enter the course title they want to add to their favorite list
+                String searchTerm = JOptionPane.showInputDialog("Enter the course title to add to your favorite list:");
 
+                if (searchTerm != null && !searchTerm.isEmpty()) {
+                    // Search for the course in the available courses
+                    Course2 foundCourse = CommonData.searchCourseByCriteria(searchTerm, "Title"); // Search by title
+
+                    if (foundCourse != null) {
+                        // Add the found course to the favorite course list
+                        favoriteCourses.add(foundCourse);
+
+                        // Show a message confirming the addition
+                        JOptionPane.showMessageDialog(null, "Course added to your favorite list.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        // Course not found in the available courses
+                        JOptionPane.showMessageDialog(null, "Course not found in the available courses.", "Not Found", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
         });
 
         menuItem6.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (favoriteCourses.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Your favorite course list is empty.", "Favorite Courses", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    // Create a string to display the favorite course list
+                    StringBuilder favoriteCoursesList = new StringBuilder("Favorite Courses:\n");
 
+                    for (Course2 course : favoriteCourses) {
+                        favoriteCoursesList.append(course.getTitle()).append("\n");
+                    }
+
+                    // Show the favorite course list to the user
+                    JOptionPane.showMessageDialog(null, favoriteCoursesList.toString(), "Favorite Courses", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         });
 
         menuItem7.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Prompt the user to enter the course title they want to enroll in
+                String searchTerm = JOptionPane.showInputDialog("Enter the course title you want to enroll in:");
+
+                if (searchTerm != null && !searchTerm.isEmpty()) {
+                    // Search for the course in the available courses
+                    Course2 foundCourse = CommonData.searchCourseByCriteria(searchTerm, "Title"); // Search by title
+                    if (foundCourse != null && foundCourse.getTitle() != null && foundCourse.getTitle().equals(searchTerm)) {                        foundCourse.enrollStudent(name);
+                        // Show a message confirming the enrollment
+                        JOptionPane.showMessageDialog(null, "You have successfully enrolled in the course.", "Enrollment Successful", JOptionPane.INFORMATION_MESSAGE);
+                    } else  {
+                        // Course not found in the available courses
+                        JOptionPane.showMessageDialog(null, "Course not found in the available courses.", "Not Found", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
 
             }
         });
@@ -210,7 +268,6 @@ public class StudentWelcomeFrame extends JFrame {
             }
         });
 
-
         //topPanel.add(scrollPane);
         mainpanel.add(topPanel, BorderLayout.CENTER);
         mainpanel.add(logoutButton, BorderLayout.SOUTH);
@@ -220,6 +277,7 @@ public class StudentWelcomeFrame extends JFrame {
         setResizable(false);
         setVisible(true);
     }
+
 
 
 
