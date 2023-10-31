@@ -92,5 +92,6 @@ public class Course2 extends CommonData {
     public ArrayList<String> getEnrolledStudents() {
         return enrolledStudents;
     }
+
 }
 

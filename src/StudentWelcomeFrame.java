@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 
 public class StudentWelcomeFrame extends JFrame {
@@ -64,7 +65,7 @@ public class StudentWelcomeFrame extends JFrame {
         menu.add(menuItem11);
 
         JPanel mainpanel = new JPanel(new BorderLayout());
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel topPanel = new JPanel(new FlowLayout());
         topPanel.add(welcomeLabel);
         courseTable = new JTable(CommonData.courseTableModel);
 
@@ -229,6 +230,8 @@ public class StudentWelcomeFrame extends JFrame {
                     // Search for the course in the available courses
                     Course2 foundCourse = CommonData.searchCourseByCriteria(searchTerm, "Title"); // Search by title
                     if (foundCourse != null && foundCourse.getTitle() != null && foundCourse.getTitle().equals(searchTerm)) {                        foundCourse.enrollStudent(name);
+                        foundCourse.enrollStudent(name);
+
                         // Show a message confirming the enrollment
                         JOptionPane.showMessageDialog(null, "You have successfully enrolled in the course.", "Enrollment Successful", JOptionPane.INFORMATION_MESSAGE);
                     } else  {
@@ -247,6 +250,8 @@ public class StudentWelcomeFrame extends JFrame {
             }
         });
 
+
+
         menuItem9.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -257,16 +262,89 @@ public class StudentWelcomeFrame extends JFrame {
         menuItem10.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Create a new frame to display the academic calendar
+                JFrame calendarFrame = new JFrame("Academic Calendar");
+                calendarFrame.setLocationRelativeTo(null);
 
+                // Create a panel to hold the calendar content
+                JPanel calendarPanel = new JPanel();
+                calendarPanel.setLayout(new GridLayout(0, 2)); // Two columns for events and dates
+
+                // Events and dates
+                String[] eventsArray = {
+                        "First day of classes", "Armed Forces Day", "Thanksgiving", "Final exam starting",
+                        "Winter break begins", "New Year's Day", "Spring break", "Last day of classes",
+                        "Graduation ceremony", "Summer vacation starts", "Independence Day", "Fall semester begins"
+                };
+
+                String[] datesArray = {
+                        "1/9/2023", "6/10/2023", "23/11/2023", "15/12/2023",
+                        "21/12/2023", "1/1/2024", "10/3/2024", "30/4/2024",
+                        "15/5/2024", "1/6/2024", "4/7/2024", "5/9/2024"
+                };
+
+
+                // Add events and dates to the calendarPanel
+                for (int i = 0; i < eventsArray.length; i++) {
+                    JLabel eventLabel = new JLabel(eventsArray[i]);
+                    JLabel dateLabel = new JLabel(datesArray[i]);
+                    calendarPanel.add(eventLabel);
+                    calendarPanel.add(dateLabel);
+                }
+
+                // Create a JScrollPane and add the calendarPanel to it
+                JScrollPane scrollPane = new JScrollPane(calendarPanel);
+                scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+                // Add the scroll pane to the frame
+                calendarFrame.getContentPane().add(scrollPane);
+
+                // Set the frame size and make it visible
+                calendarFrame.setSize(400, 200); // Adjust the size as needed
+                calendarFrame.setResizable(false);
+                calendarFrame.setVisible(true);
             }
         });
 
         menuItem11.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Create a list to store old classes with course titles and grades
+                ArrayList<String> oldClasses = new ArrayList<>();
 
+                // Populate the list with sample data (course titles and grades)
+                oldClasses.add("Course Title: Math 101, Grade: A");
+                oldClasses.add("Course Title: Science 201, Grade: B");
+                oldClasses.add("Course Title: Literature 301, Grade: A-");
+                oldClasses.add("Course Title: History 101, Grade: B+");
+
+                // Create a DefaultListModel to hold the old classes data
+                DefaultListModel<String> listModel = new DefaultListModel<>();
+
+                // Add old classes data to the list model
+                for (String courseInfo : oldClasses) {
+                    listModel.addElement(courseInfo);
+                }
+
+                // Create a JList to display old courses
+                JList<String> oldCoursesList = new JList<>(listModel);
+
+                // Enable tooltips for the JList items
+                oldCoursesList.setToolTipText("Old Courses");
+
+                // Create a JScrollPane to add scrolling functionality
+                JScrollPane scrollPane = new JScrollPane(oldCoursesList);
+
+                // Show the old courses list in a dialog message
+                JOptionPane.showMessageDialog(
+                        null, scrollPane, "Old Courses",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
             }
         });
+
+
 
         //topPanel.add(scrollPane);
         mainpanel.add(topPanel, BorderLayout.CENTER);

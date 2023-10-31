@@ -119,6 +119,46 @@ public class CommonData {
         return daysList;
     }
 
+    public static ArrayList<Course2> getAllCoursesFromTableModel(DefaultTableModel courseTableModel) {
+
+        ArrayList<Course2> allCourses = new ArrayList<>();
+
+        for (int row = 0; row < courseTableModel.getRowCount(); row++) {
+            String title = courseTableModel.getValueAt(row, getColumnIndex("Title")).toString();
+            String subject = courseTableModel.getValueAt(row, getColumnIndex("Subject")).toString();
+            String instructor = courseTableModel.getValueAt(row, getColumnIndex("Instructor")).toString();
+            String departmentStr = courseTableModel.getValueAt(row, getColumnIndex("Department")).toString();
+            String daysStr = courseTableModel.getValueAt(row, getColumnIndex("Days")).toString();
+            String timeStr = courseTableModel.getValueAt(row, getColumnIndex("Time")).toString();
+            String levelStr = courseTableModel.getValueAt(row, getColumnIndex("Level")).toString();
+            String content = courseTableModel.getValueAt(row, getColumnIndex("Content")).toString();
+
+            // Convert department,days, time, and level strings to their respective enum types
+            Department department = Department.valueOf(departmentStr); // Assuming Department is an enum
+            ArrayList<WorkingDays> days = getWorkingDaysList(daysStr); // Parse days
+            Time time = Time.valueOf(timeStr); // Parse time
+            Level level = Level.valueOf(levelStr); // Assuming Level is an enum
+
+            // Create a new Course2 instance and add it to the list
+            Course2 course = new Course2(title, subject, department, days, time, level, instructor, content);
+            allCourses.add(course);
+        }
+
+        return allCourses;
+    }
+
+    public static ArrayList<String> getAllCourseTitlesFromTableModel(JTable table) {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        ArrayList<String> courseTitles = new ArrayList<>();
+
+        for (int row = 0; row < model.getRowCount(); row++) {
+            String title = model.getValueAt(row, getColumnIndex("Title")).toString();
+            courseTitles.add(title);
+        }
+
+        return courseTitles;
+    }
+
 }
 
 
