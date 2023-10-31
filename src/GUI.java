@@ -4,7 +4,7 @@ public class GUI {
     public static void main(String[] args) {
         LoginFrame loginFrame = new LoginFrame();
         loginFrame.setVisible(true);
-        CommonData.Level level = CommonData.Level.BEGINNER;
+       // CommonData.Level level = CommonData.Level.BEGINNER;
         ArrayList<CommonData.WorkingDays> days = new ArrayList<>();
         days.add(CommonData.WorkingDays.M);
         days.add(CommonData.WorkingDays.W);
