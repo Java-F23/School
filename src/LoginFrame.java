@@ -13,6 +13,7 @@ public class LoginFrame extends JFrame {
     private ButtonGroup roleGroup;
     private JButton loginButton;
 
+    private String name;
     public LoginFrame() {
         //setting frame name, size
         setTitle("Login");
@@ -34,11 +35,13 @@ public class LoginFrame extends JFrame {
         roleGroup.add(studentButton);
         roleGroup.add(adminButton);
         loginButton = new JButton("Login");
+
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    String name = nameField.getText();
+                    name = nameField.getText();
+
                     if (isValidName(name)) {
                         if (studentButton.isSelected()) {
                             StudentWelcomeFrame studentWelcome = new StudentWelcomeFrame(name);
@@ -85,6 +88,9 @@ public class LoginFrame extends JFrame {
         //To disable minimization or maximization
         setResizable(false);
         setVisible(true);
+
+
+
     }
 
     //Check if the name is valid or not
@@ -95,4 +101,7 @@ public class LoginFrame extends JFrame {
         return true;
     }
 
+    public String getName() {
+        return nameField.getText();
+    }
 }

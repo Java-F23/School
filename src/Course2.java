@@ -10,7 +10,8 @@ public class Course2 extends CommonData {
     private String instructor;
     private String content;
     private ArrayList<String> enrolledStudents;
-
+    private ArrayList<String> students = new ArrayList<>();
+    private ArrayList<String> grades = new ArrayList<>();
     public Course2(String title, String subject, Department department, ArrayList<WorkingDays> days, Time time, Level level, String instructor, String content) {
         this.title = title;
         this.subject = subject;
@@ -91,6 +92,33 @@ public class Course2 extends CommonData {
     }
     public ArrayList<String> getEnrolledStudents() {
         return enrolledStudents;
+    }
+
+    // Add a student and their grade
+    public void addStudentGrade(String studentName,String letterGrade) {
+        String grade;
+        //Intial value for the grade
+        if (letterGrade == null)
+        {
+            grade = "A";
+        }
+        else
+        {
+            grade = letterGrade;
+        }
+        students.add(studentName);
+        grades.add(grade);
+    }
+
+    // Retrieve the grade for a specific student
+    public String getGradeForStudent(String studentName) {
+        for (int i = 0; i < students.size(); i++) {
+            if (students.get(i).equals(studentName)) {
+                return grades.get(i);
+            }
+        }
+        // Return null if the student is not found
+        return null;
     }
 
 }

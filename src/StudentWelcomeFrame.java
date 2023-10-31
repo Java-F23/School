@@ -14,6 +14,15 @@ public class StudentWelcomeFrame extends JFrame {
     private JTable courseTable;
     private ArrayList<Course2> favoriteCourses = new ArrayList<>();
 
+    private ArrayList<Course2> enrolledCourses = new ArrayList<>();
+
+    public ArrayList<Course2> getEnrolledCourses() {
+        return enrolledCourses;
+    }
+
+    public void setEnrolledCourses(ArrayList<Course2> enrolledCourses) {
+        this.enrolledCourses = enrolledCourses;
+    }
 
     public StudentWelcomeFrame(String name) {
         setTitle("Home Page");
@@ -22,6 +31,7 @@ public class StudentWelcomeFrame extends JFrame {
         setLocationRelativeTo(null);
 
         welcomeLabel = new JLabel("Welcome " + name + ", please choose one of the facilities:");
+        welcomeLabel.setToolTipText("Check the facilities menu at the top of the page.");
         welcomeLabel.setFont(new Font("Serif", Font.BOLD, 20));
         welcomeLabel.setForeground(Color.BLUE);
 
@@ -229,9 +239,12 @@ public class StudentWelcomeFrame extends JFrame {
                 if (searchTerm != null && !searchTerm.isEmpty()) {
                     // Search for the course in the available courses
                     Course2 foundCourse = CommonData.searchCourseByCriteria(searchTerm, "Title"); // Search by title
-                    if (foundCourse != null && foundCourse.getTitle() != null && foundCourse.getTitle().equals(searchTerm)) {                        foundCourse.enrollStudent(name);
+                    if (foundCourse != null && foundCourse.getTitle() != null && foundCourse.getTitle().equals(searchTerm)) {
                         foundCourse.enrollStudent(name);
-
+                        // Add the enrolled course to the enrolledCourses ArrayList
+                        enrolledCourses.add(foundCourse);
+                        // Add the student name to the students list in this course and give initial vlaue for this course grade
+                        foundCourse.addStudentGrade(name,null);
                         // Show a message confirming the enrollment
                         JOptionPane.showMessageDialog(null, "You have successfully enrolled in the course.", "Enrollment Successful", JOptionPane.INFORMATION_MESSAGE);
                     } else  {
@@ -247,6 +260,11 @@ public class StudentWelcomeFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                String message = "Enrolled Courses:\n";
+                for (Course2 course : enrolledCourses) {
+                    message += "- " + course.getTitle() + "\n";
+                }
+                JOptionPane.showMessageDialog(null, message, "Enrolled Courses", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
@@ -255,6 +273,19 @@ public class StudentWelcomeFrame extends JFrame {
         menuItem9.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (enrolledCourses.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "You are not enrolled in any courses.", "No Enrolled Courses", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    String message = "Your Grades:\n";
+
+                    for (Course2 course : enrolledCourses) {
+                        // Replace "getGradeForStudent(name)" with the actual method to retrieve the grade for the student
+                        String grade = course.getGradeForStudent(name); // Assuming you have a method like this
+                        message += course.getTitle() + ": " + grade + "\n";
+                    }
+
+                    JOptionPane.showMessageDialog(null, message, "Enrolled Courses Grades", JOptionPane.INFORMATION_MESSAGE);
+                }
 
             }
         });
@@ -314,10 +345,10 @@ public class StudentWelcomeFrame extends JFrame {
                 ArrayList<String> oldClasses = new ArrayList<>();
 
                 // Populate the list with sample data (course titles and grades)
-                oldClasses.add("Course Title: Math 101, Grade: A");
-                oldClasses.add("Course Title: Science 201, Grade: B");
-                oldClasses.add("Course Title: Literature 301, Grade: A-");
-                oldClasses.add("Course Title: History 101, Grade: B+");
+                oldClasses.add("Math 101, UW 8:30,  Grade: A");
+                oldClasses.add("Science 201, MR 2:00, Grade: B");
+                oldClasses.add("Literature 301, MR 10:30,  Grade: A-");
+                oldClasses.add("History 101, UW 11:30, Grade: B+");
 
                 // Create a DefaultListModel to hold the old classes data
                 DefaultListModel<String> listModel = new DefaultListModel<>();
@@ -331,7 +362,7 @@ public class StudentWelcomeFrame extends JFrame {
                 JList<String> oldCoursesList = new JList<>(listModel);
 
                 // Enable tooltips for the JList items
-                oldCoursesList.setToolTipText("Old Courses");
+                oldCoursesList.setToolTipText("Your historical class schedules and grades");
 
                 // Create a JScrollPane to add scrolling functionality
                 JScrollPane scrollPane = new JScrollPane(oldCoursesList);
