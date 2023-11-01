@@ -19,7 +19,7 @@ public class CommonData {
     }
 
     public enum Department {
-        MATH, SCIENCE, LITERATURE;
+        SCIENCE, MATH, LITERATURE;
     }
 
     public enum Level {
@@ -79,7 +79,6 @@ public class CommonData {
         String daysStr = courseTableModel.getValueAt(rowIndex, 5).toString();
         String timeStr = courseTableModel.getValueAt(rowIndex, 6).toString();
         String levelStr = courseTableModel.getValueAt(rowIndex, 7).toString();
-
 
         // Convert department,days, time, and level strings to their respective enum types
         Department department = Department.valueOf(courseDepartment);
@@ -150,7 +149,7 @@ public class CommonData {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         ArrayList<String> courseTitles = new ArrayList<>();
 
-        for (int row = 0; row < model.getRowCount(); row++) {
+        for (int row = 1; row < model.getRowCount(); row++) {
             String title = model.getValueAt(row, getColumnIndex("Title")).toString();
             courseTitles.add(title);
         }
@@ -160,9 +159,8 @@ public class CommonData {
     public static ArrayList<Course2> getCoursesByDepartment(CommonData.Department department) {
         ArrayList<Course2> coursesByDepartment = new ArrayList<>();
 
-        for (int row = 0; row < courseTableModel.getRowCount(); row++) {
+        for (int row = 1; row < courseTableModel.getRowCount(); row++) {
             Course2 course = getCourseDetails(row);
-
             if (course.getDepartment() == department) {
                 coursesByDepartment.add(course);
             }

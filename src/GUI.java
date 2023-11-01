@@ -13,14 +13,14 @@ public class GUI {
         Course2 course1 = new Course2("Introduction to Programming", "Computer Science", CommonData.Department.SCIENCE,days,CommonData.Time.At_08_30,CommonData.Level.BEGINNER,"Dr. Smith", "Basics of programming");
         Course2 course2 = new Course2("Database Management", "Information Systems", CommonData.Department.SCIENCE,days,CommonData.Time.At_11_30,CommonData.Level.INTERMEDIATE,"Dr. Johnson", "Database design and management");
         Course2 course3 = new Course2("Advanced Calculus", "Mathematics", CommonData.Department.MATH,days,CommonData.Time.At_13_30,CommonData.Level.ADVANCED,"Dr. Brown", "Advanced calculus concepts");
-        //Example for instructor list
+        //Example for instructor lists
         instructorlist.add("Dr. Smith");
         instructorlist.add("Dr. Johnson");
         instructorlist.add("Dr. Brown");
 
         CommonData.addCourseToTable(course1.getTitle(),course1.getSubject(),course1.getInstructor(), course1.getContent(), course1.getDepartment(),course1.getDays(),course1.getTime(),course1.getLevel());
         CommonData.addCourseToTable(course2.getTitle(),course2.getSubject(),course2.getInstructor(), course2.getContent(), course2.getDepartment(),course2.getDays(),course2.getTime(),course2.getLevel());
-        CommonData.addCourseToTable(course1.getTitle(),course3.getSubject(),course3.getInstructor(), course3.getContent(), course3.getDepartment(),course3.getDays(),course3.getTime(),course3.getLevel());
+        CommonData.addCourseToTable(course3.getTitle(),course3.getSubject(),course3.getInstructor(), course3.getContent(), course3.getDepartment(),course3.getDays(),course3.getTime(),course3.getLevel());
         CommonData.setInstructorsList(instructorlist);
 
         //To test the gui as student skipping the login frame

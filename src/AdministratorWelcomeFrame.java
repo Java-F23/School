@@ -219,12 +219,15 @@ public class AdministratorWelcomeFrame extends JFrame {
                 for (CommonData.Department department : CommonData.Department.values()) {
                     departments.add(department);
                 }
+
                 // Create a tabbed pane to hold tables for each department
                 JTabbedPane tabbedPane = new JTabbedPane();
+
 
                 // Iterate through departments and create a table for each
                 for (CommonData.Department department : departments) {
                     // Get courses for the current department (modify as per your data structure)
+                    System.out.println(department);
                     ArrayList<Course2> departmentCourses = CommonData.getCoursesByDepartment(department);
 
                     // Create a table model for the department courses
@@ -243,6 +246,7 @@ public class AdministratorWelcomeFrame extends JFrame {
                     // Create a table for the department and add it to a scroll pane
                     JTable departmentTable = new JTable(departmentTableModel);
                     JScrollPane scrollPane = new JScrollPane(departmentTable);
+                    departmentTable.setDefaultEditor(Object.class, null);
 
                     // Add the scroll pane to the tabbed pane with the department name as the tab title
                     tabbedPane.addTab(department.toString(), scrollPane);
@@ -253,6 +257,8 @@ public class AdministratorWelcomeFrame extends JFrame {
 
                 // Set the frame to be visible
                 categorizationFrame.setVisible(true);
+
+                setResizable(false);
             }
         });
         menuItem5.addActionListener(new ActionListener() {
@@ -274,10 +280,6 @@ public class AdministratorWelcomeFrame extends JFrame {
 
             }
         });
-
-
-
-
 
 
         JPanel mainpanel = new JPanel(new BorderLayout());
