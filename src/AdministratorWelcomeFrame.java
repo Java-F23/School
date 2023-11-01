@@ -1,12 +1,17 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 
 public class AdministratorWelcomeFrame extends JFrame {
     private JMenuBar menuBar;
     private JMenu menu;
     private JButton logoutButton;
     private JLabel welcomeLabel;
+
+
     public AdministratorWelcomeFrame(String name) {
         setTitle("Home Page");
         setSize(500, 500);
@@ -67,12 +72,134 @@ public class AdministratorWelcomeFrame extends JFrame {
         menuItem2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Prompt the administrator to enter the course title
+                String courseTitle = JOptionPane.showInputDialog("Enter the course title to edit:");
+
+                if (courseTitle != null && !courseTitle.isEmpty()) {
+                    // Search for the course in the available courses
+                    Course2 foundCourse = CommonData.searchCourseByCriteria(courseTitle, "Title");
+
+                    if (foundCourse != null) {
+                        // Display a combo box to choose the attribute to edit
+                        String[] attributes = {"Title", "Subject", "Department", "Days", "Time", "Level", "Instructor", "Content"};
+                        String selectedAttribute = (String) JOptionPane.showInputDialog(
+                                null,
+                                "Choose the attribute to edit:",
+                                "Edit Course Attribute",
+                                JOptionPane.QUESTION_MESSAGE,
+                                null,
+                                attributes,
+                                attributes[0]
+                        );
+
+                        if (selectedAttribute != null) {
+                            // Prompt the administrator to enter the new value for the selected attribute
+                            String newValue = JOptionPane.showInputDialog("Enter the new value for " + selectedAttribute + ":");
+                            if (newValue != null) {
+                                // Update the selected attribute of the course
+                                switch (selectedAttribute) {
+                                    case "Title":
+                                        foundCourse.setTitle(newValue);
+                                        break;
+                                    case "Subject":
+                                        foundCourse.setSubject(newValue);
+                                        break;
+                                    case "Department":
+                                        foundCourse.setDepartment(CommonData.Department.valueOf(newValue)); // Assuming Department is an enum
+                                        break;
+                                    case "Days":
+                                        foundCourse.setDays(CommonData.getWorkingDaysList(newValue));
+                                        break;
+                                    case "Time":
+                                        foundCourse.setTime(CommonData.Time.valueOf(newValue));
+                                        break;
+                                    case "Level":
+                                        foundCourse.setLevel(CommonData.Level.valueOf(newValue));
+                                        break;
+                                    case "Instructor":
+                                        foundCourse.setInstructor(newValue);
+                                        break;
+                                    case "Content":
+                                        foundCourse.setContent(newValue);
+                                        break;
+                                }
+                                // Inform the administrator that the attribute has been updated
+                                JOptionPane.showMessageDialog(null, selectedAttribute + " updated successfully.", "Attribute Updated", JOptionPane.INFORMATION_MESSAGE);
+
+                            }
+                        }
+                    } else {
+                        // Course not found in the available courses
+                        JOptionPane.showMessageDialog(null, "Course not found in the available courses.", "Not Found", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
 
             }
         });
         menuItem3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+// Show a dialog to choose whether to add or remove an instructor
+                JRadioButton addInstructorButton = new JRadioButton("Add Instructor");
+                JRadioButton removeInstructorButton = new JRadioButton("Remove Instructor");
+                ButtonGroup radioGroup = new ButtonGroup();
+                radioGroup.add(addInstructorButton);
+                radioGroup.add(removeInstructorButton);
+
+                Object[] options = {"OK", "Cancel"};
+                Object[] message = {
+                        "Choose an action:",
+                        addInstructorButton,
+                        removeInstructorButton
+                };
+
+                int choice = JOptionPane.showOptionDialog(
+                        null,
+                        message,
+                        "Add/Remove Instructor",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]
+                );
+
+                if (choice == JOptionPane.OK_OPTION) {
+                    if (addInstructorButton.isSelected()) {
+                        // Add Instructor
+                        String newInstructor = JOptionPane.showInputDialog("Enter the name of the new instructor:");
+                        if (newInstructor != null && !newInstructor.isEmpty()) {
+                            CommonData.getInstructorsList();
+                            if (!CommonData.getInstructorsList().contains(newInstructor)) {
+                                CommonData.getInstructorsList().add(newInstructor);
+                                JOptionPane.showMessageDialog(null, "Instructor added successfully.", "Instructor Added", JOptionPane.INFORMATION_MESSAGE);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Instructor already exists.", "Instructor Exists", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                    } else if (removeInstructorButton.isSelected()) {
+                        // Remove Instructor
+                        if (CommonData.getInstructorsList().isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "No instructors to remove.", "No Instructors", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            String[] instructorsArray = CommonData.getInstructorsList().toArray(new String[0]);
+                            String selectedInstructor = (String) JOptionPane.showInputDialog(
+                                    null,
+                                    "Select an instructor to remove:",
+                                    "Remove Instructor",
+                                    JOptionPane.QUESTION_MESSAGE,
+                                    null,
+                                    instructorsArray,
+                                    instructorsArray[0]
+                            );
+
+                            if (selectedInstructor != null) {
+                                CommonData.getInstructorsList().remove(selectedInstructor);
+                                JOptionPane.showMessageDialog(null, "Instructor removed successfully.", "Instructor Removed", JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        }
+                    }
+                }
 
             }
         });
@@ -81,6 +208,51 @@ public class AdministratorWelcomeFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                // Create a frame to display department-based categorization
+                JFrame categorizationFrame = new JFrame("Course Categorization by Department");
+                categorizationFrame.setSize(800, 600);
+                categorizationFrame.setLocationRelativeTo(null);
+                categorizationFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+                // Get an ArrayList of all available departments (you might need to modify this)
+                ArrayList<CommonData.Department> departments = new ArrayList<>();
+                for (CommonData.Department department : CommonData.Department.values()) {
+                    departments.add(department);
+                }
+                // Create a tabbed pane to hold tables for each department
+                JTabbedPane tabbedPane = new JTabbedPane();
+
+                // Iterate through departments and create a table for each
+                for (CommonData.Department department : departments) {
+                    // Get courses for the current department (modify as per your data structure)
+                    ArrayList<Course2> departmentCourses = CommonData.getCoursesByDepartment(department);
+
+                    // Create a table model for the department courses
+                    DefaultTableModel departmentTableModel = new DefaultTableModel();
+                    departmentTableModel.addColumn("Title");
+                    departmentTableModel.addColumn("Instructor");
+                    departmentTableModel.addColumn("Days");
+                    departmentTableModel.addColumn("Time");
+
+                    // Add course data to the table model
+                    for (Course2 course : departmentCourses) {
+                        Object[] courseData = {course.getTitle(), course.getInstructor(), course.getDays(), course.getTime()};
+                        departmentTableModel.addRow(courseData);
+                    }
+
+                    // Create a table for the department and add it to a scroll pane
+                    JTable departmentTable = new JTable(departmentTableModel);
+                    JScrollPane scrollPane = new JScrollPane(departmentTable);
+
+                    // Add the scroll pane to the tabbed pane with the department name as the tab title
+                    tabbedPane.addTab(department.toString(), scrollPane);
+                }
+
+                // Add the tabbed pane to the categorization frame
+                categorizationFrame.add(tabbedPane);
+
+                // Set the frame to be visible
+                categorizationFrame.setVisible(true);
             }
         });
         menuItem5.addActionListener(new ActionListener() {
@@ -104,6 +276,10 @@ public class AdministratorWelcomeFrame extends JFrame {
         });
 
 
+
+
+
+
         JPanel mainpanel = new JPanel(new BorderLayout());
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         topPanel.add(welcomeLabel);
@@ -115,4 +291,5 @@ public class AdministratorWelcomeFrame extends JFrame {
         setResizable(false);
         setVisible(true);
     }
+
 }

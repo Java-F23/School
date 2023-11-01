@@ -8,8 +8,8 @@ import java.awt.*;
 
 public class CommonData {
     public static DefaultTableModel courseTableModel;
+    private static ArrayList<String> instructorsList = new ArrayList<>();
     private JTable courseTable;
-
     public enum WorkingDays {
        U, M, T, W, R;
     }
@@ -19,7 +19,7 @@ public class CommonData {
     }
 
     public enum Department {
-        MATH, SCIENCE, LITERATURE, // Add more departments as needed
+        MATH, SCIENCE, LITERATURE;
     }
 
     public enum Level {
@@ -82,10 +82,10 @@ public class CommonData {
 
 
         // Convert department,days, time, and level strings to their respective enum types
-        Department department = Department.valueOf(courseDepartment); // Assuming Department is an enum
-        ArrayList<WorkingDays> days = getWorkingDaysList(daysStr); // Parse days
-        Time time = Time.valueOf(timeStr); // Parse time
-        Level level = Level.valueOf(levelStr); // Assuming Level is an enum
+        Department department = Department.valueOf(courseDepartment);
+        ArrayList<WorkingDays> days = getWorkingDaysList(daysStr);
+        Time time = Time.valueOf(timeStr);
+        Level level = Level.valueOf(levelStr);
 
         return new Course2(courseTitle, courseSubject, department,days,time,level,courseInstructor, courseContent );
         }
@@ -105,7 +105,7 @@ public class CommonData {
                 return -1;
         }
     }
-    private static ArrayList<WorkingDays> getWorkingDaysList(String daysStr) {
+    public static ArrayList<WorkingDays> getWorkingDaysList(String daysStr) {
         ArrayList<WorkingDays> daysList = new ArrayList<>();
         String[] dayTokens = daysStr.replaceAll("[\\[\\]\\s]", "").split(",");
         for (String day : dayTokens) {
@@ -134,11 +134,10 @@ public class CommonData {
             String content = courseTableModel.getValueAt(row, getColumnIndex("Content")).toString();
 
             // Convert department,days, time, and level strings to their respective enum types
-            Department department = Department.valueOf(departmentStr); // Assuming Department is an enum
-            ArrayList<WorkingDays> days = getWorkingDaysList(daysStr); // Parse days
-            Time time = Time.valueOf(timeStr); // Parse time
-            Level level = Level.valueOf(levelStr); // Assuming Level is an enum
-
+            Department department = Department.valueOf(departmentStr);
+            ArrayList<WorkingDays> days = getWorkingDaysList(daysStr);
+            Time time = Time.valueOf(timeStr);
+            Level level = Level.valueOf(levelStr);
             // Create a new Course2 instance and add it to the list
             Course2 course = new Course2(title, subject, department, days, time, level, instructor, content);
             allCourses.add(course);
@@ -158,7 +157,26 @@ public class CommonData {
 
         return courseTitles;
     }
+    public static ArrayList<Course2> getCoursesByDepartment(CommonData.Department department) {
+        ArrayList<Course2> coursesByDepartment = new ArrayList<>();
 
+        for (int row = 0; row < courseTableModel.getRowCount(); row++) {
+            Course2 course = getCourseDetails(row);
+
+            if (course.getDepartment() == department) {
+                coursesByDepartment.add(course);
+            }
+        }
+
+        return coursesByDepartment;
+    }
+    public  static ArrayList<String> getInstructorsList() {
+        return instructorsList;
+    }
+
+    public static void setInstructorsList(ArrayList<String> instructorslist) {
+        instructorsList = instructorslist;
+    }
 }
 
 
