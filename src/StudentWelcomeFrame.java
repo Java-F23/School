@@ -374,8 +374,6 @@ public class StudentWelcomeFrame extends JFrame {
             }
         });
 
-
-
         //topPanel.add(scrollPane);
         mainpanel.add(topPanel, BorderLayout.CENTER);
         mainpanel.add(logoutButton, BorderLayout.SOUTH);
@@ -385,8 +383,5 @@ public class StudentWelcomeFrame extends JFrame {
         setResizable(false);
         setVisible(true);
     }
-
-
-
 
 }

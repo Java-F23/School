@@ -17,6 +17,7 @@ public class AdministratorWelcomeFrame extends JFrame {
         setSize(500, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        DefaultTableModel departmentTableModel = new DefaultTableModel();
 
 
         welcomeLabel = new JLabel("Welcome " + name + ", please choose one of the facilities:");
@@ -231,7 +232,6 @@ public class AdministratorWelcomeFrame extends JFrame {
                     ArrayList<Course2> departmentCourses = CommonData.getCoursesByDepartment(department);
 
                     // Create a table model for the department courses
-                    DefaultTableModel departmentTableModel = new DefaultTableModel();
                     departmentTableModel.addColumn("Title");
                     departmentTableModel.addColumn("Instructor");
                     departmentTableModel.addColumn("Days");
@@ -265,6 +265,7 @@ public class AdministratorWelcomeFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+             displayEnrollmentCounts();
             }
         });
 
@@ -280,18 +281,48 @@ public class AdministratorWelcomeFrame extends JFrame {
 
             }
         });
+      JPanel mainpanel = new JPanel(new BorderLayout());
+             JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+             topPanel.add(welcomeLabel);
+             mainpanel.add(topPanel, BorderLayout.CENTER);
+             mainpanel.add(logoutButton, BorderLayout.SOUTH);
 
+             add(mainpanel);
 
-        JPanel mainpanel = new JPanel(new BorderLayout());
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        topPanel.add(welcomeLabel);
-        mainpanel.add(topPanel, BorderLayout.CENTER);
-        mainpanel.add(logoutButton, BorderLayout.SOUTH);
+             setResizable(false);
+             setVisible(true);
 
-        add(mainpanel);
-
-        setResizable(false);
-        setVisible(true);
+        
     }
+
+
+   private void displayEnrollmentCounts() {
+        DefaultTableModel departmentTableModel = CommonData.courseTableModel;
+        // Create a dialog or frame to display enrollment counts
+        JFrame enrollmentFrame = new JFrame("Enrollment Counts");
+        enrollmentFrame.setSize(400, 300);
+        enrollmentFrame.setLocationRelativeTo(null);
+        enrollmentFrame.setResizable(false);
+
+       JTextArea enrollmentTextArea = new JTextArea();
+        enrollmentTextArea.setEditable(false);
+
+        System.out.println(departmentTableModel.getRowCount());
+
+        // Iterate through all available courses and display enrollment counts
+        for (int row = 1; row < departmentTableModel.getRowCount(); row++) {
+            //Course2 course = new Course2(null,null,null,null,null,null,null,null); // Initialize foundCourse to null
+            // Use the getCourseDetails method to get course details
+            Course2 course = CommonData.getCourseDetails(row);
+           // System.out.println(departmentTableModel.getRowCount());
+            //course = course.getCourseDetails(row);
+            int enrollmentCount = course.getEnrolledStudents().size();
+            enrollmentTextArea.append(course.getTitle() + ": " + enrollmentCount + " students\n");
+        }
+
+        enrollmentFrame.add(enrollmentTextArea);
+        enrollmentFrame.setVisible(true);
+
+   }
 
 }

@@ -23,8 +23,9 @@ public class GUI {
         CommonData.addCourseToTable(course3.getTitle(),course3.getSubject(),course3.getInstructor(), course3.getContent(), course3.getDepartment(),course3.getDays(),course3.getTime(),course3.getLevel());
         CommonData.setInstructorsList(instructorlist);
 
+        /*
         //To test the gui as student skipping the login frame
-          /*  StudentWelcomeFrame user1 = new StudentWelcomeFrame("Ahmed");
+            StudentWelcomeFrame user1 = new StudentWelcomeFrame("Ahmed");
             // Create an ArrayList of Course2 to represent the initial enrolled courses
             ArrayList<Course2> initialEnrolledCourses = new ArrayList<>();
 
@@ -35,6 +36,6 @@ public class GUI {
             course1.addStudentGrade("Ahmed","A");
             course3.addStudentGrade("Ahmed","A-");
             user1.setEnrolledCourses(initialEnrolledCourses);
-          */
+        */
     }
 }
