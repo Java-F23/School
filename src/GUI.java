@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 public class GUI {
     public static void main(String[] args) {
@@ -17,11 +18,15 @@ public class GUI {
         instructorlist.add("Dr. Smith");
         instructorlist.add("Dr. Johnson");
         instructorlist.add("Dr. Brown");
-
+        //Add available courses to the table
         CommonData.addCourseToTable(course1.getTitle(),course1.getSubject(),course1.getInstructor(), course1.getContent(), course1.getDepartment(),course1.getDays(),course1.getTime(),course1.getLevel());
         CommonData.addCourseToTable(course2.getTitle(),course2.getSubject(),course2.getInstructor(), course2.getContent(), course2.getDepartment(),course2.getDays(),course2.getTime(),course2.getLevel());
         CommonData.addCourseToTable(course3.getTitle(),course3.getSubject(),course3.getInstructor(), course3.getContent(), course3.getDepartment(),course3.getDays(),course3.getTime(),course3.getLevel());
         CommonData.setInstructorsList(instructorlist);
+        //Enroll students in courses
+        course1.enrollStudent("Student1");
+        course1.enrollStudent("Student2");
+        course3.enrollStudent("Student1");
 
         /*
         //To test the gui as student skipping the login frame

@@ -1,4 +1,8 @@
 import java.util.ArrayList;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+
 
 public class Course2 extends CommonData {
     private String title;
@@ -12,6 +16,8 @@ public class Course2 extends CommonData {
     private ArrayList<String> enrolledStudents;
     private ArrayList<String> students = new ArrayList<>();
     private ArrayList<String> grades = new ArrayList<>();
+    private ArrayList<Assignment> assignments = new ArrayList<>();
+
     public Course2(String title, String subject, Department department, ArrayList<WorkingDays> days, Time time, Level level, String instructor, String content) {
         this.title = title;
         this.subject = subject;
@@ -22,6 +28,7 @@ public class Course2 extends CommonData {
         this.instructor = instructor;
         this.content = content;
         this.enrolledStudents = new ArrayList<>();
+        enrolledStudents.add("Ahmed"); //for testing
     }
 
     public void setTitle(String title) {
@@ -59,6 +66,13 @@ public class Course2 extends CommonData {
         enrolledStudents.add(studentName);
     }
 
+    public ArrayList<Assignment> getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(ArrayList<Assignment> assignments) {
+        this.assignments = assignments;
+    }
     public String getTitle() {
         return title;
     }
@@ -119,6 +133,31 @@ public class Course2 extends CommonData {
         }
         // Return null if the student is not found
         return null;
+    }
+
+    // Add an assignment to the course
+    public void addAssignment(String name, String description, String dueDateStr) {
+        // You can add validation for the assignment details here
+        if (name == null || name.isEmpty() || description == null || description.isEmpty() || dueDateStr == null || dueDateStr.isEmpty()) {
+            throw new IllegalArgumentException("Invalid assignment details.");
+        }
+
+        // You can replace this with a custom date parsing logic
+        Date dueDate = parseDate(dueDateStr);
+
+        Assignment newAssignment = new Assignment(name, description, dueDate);
+        assignments.add(newAssignment);
+    }
+
+    // Parse a date string into a Date object
+    private Date parseDate(String dateStr) {
+        try {
+            // Replace this with a custom date parsing logic
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            return dateFormat.parse(dateStr);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid date format");
+        }
     }
 
 }

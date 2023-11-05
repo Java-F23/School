@@ -2,9 +2,25 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.math.BigDecimal;
+
 
 
 public class StudentWelcomeFrame extends JFrame {
+    private static BigDecimal totalCredits;
+    private static BigDecimal totalGradePoints;
+
+
+    public static BigDecimal getTotalGradePoints() {
+        return totalGradePoints;
+    }
+
+    public void setTotalGradePoints(BigDecimal totalGradePoints) {
+        this.totalGradePoints = totalGradePoints;
+    }
+    public static BigDecimal getTotalCredits() {
+        return totalCredits;
+    }
 
     private JMenuBar menuBar;
     private JMenu menu;
