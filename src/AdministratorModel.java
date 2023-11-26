@@ -5,6 +5,7 @@ import java.util.Map;
 import java.math.BigDecimal;
 
 
+
 public class AdministratorModel {
     private ArrayList<CourseModel> courses;
     private ArrayList<InstructorModel> instructors;
@@ -277,15 +278,54 @@ public class AdministratorModel {
 
     // Add/remove events in the calendar
     public void addEventToCalendar(String date, String event) {
-        calendarEvents.computeIfAbsent(date, k -> new ArrayList<>()).add(event);
+        try {
+            validateEventData(date, event);
+
+            // Check if the date already has events
+            List<String> events = calendarEvents.computeIfAbsent(date, k -> new ArrayList<>());
+            if (!events.contains(event)) {
+                events.add(event);
+                CSVHandler.saveEventsToCsv(calendarEvents);
+                System.out.println("Event '" + event + "' added for the date '" + date + "'.");
+            } else {
+                throw new ExceptionHandling.InvalidEventDataException("Event '" + event + "' is already added for the date '" + date + "'.");
+            }
+        } catch (ExceptionHandling.InvalidEventDataException e) {
+            System.err.println("Error adding event: " + e.getMessage());
+        }
     }
 
     public void removeEventFromCalendar(String date, String event) {
-        calendarEvents.computeIfPresent(date, (k, v) -> {
-            v.remove(event);
-            return v.isEmpty() ? null : v;
-        });
+        try {
+            validateEventData(date, event);
+
+            // Check if the date has events
+            calendarEvents.computeIfPresent(date, (k, v) -> {
+                try {
+                    if (v.contains(event)) {
+                        v.remove(event);
+                        System.out.println("Event '" + event + "' removed for the date '" + date + "'.");
+                        CSVHandler.saveEventsToCsv(calendarEvents); // Update CSV after removing event
+                        return v.isEmpty() ? null : v;
+                    } else {
+                        // Event not found, throw an unchecked exception
+                        throw new ExceptionHandling.InvalidEventDataException("Event '" + event + "' not found for the date '" + date + "'.");
+                    }
+                } catch (ExceptionHandling.InvalidEventDataException e) {
+                    // Handle the exception using the custom handling method
+                    ExceptionHandling.handleInvalidEventDataException(e.getMessage());
+                    return v; // Return the unmodified list to keep the map consistent
+                }
+            });
+            // If the date does not have any events, remove it from the map
+            if (calendarEvents.get(date) != null && calendarEvents.get(date).isEmpty()) {
+                calendarEvents.remove(date);
+            }
+        } catch (ExceptionHandling.InvalidEventDataException e) {
+            System.err.println("Error removing event: " + e.getMessage());
+        }
     }
+
 
     // Validation method
     private void validateCourse(CourseModel course) throws ExceptionHandling.InvalidDataException {
@@ -307,6 +347,19 @@ public class AdministratorModel {
     private void validateStudent(Student student) throws ExceptionHandling.InvalidStudentDataException {
         if (student == null || student.getName() == null || student.getName().isEmpty()) {
             throw new ExceptionHandling.InvalidStudentDataException("Invalid student data");
+        }
+    }
+    // Validation method for event data
+    private void validateEventData(String date, String event) throws ExceptionHandling.InvalidEventDataException {
+        // Implement validation logic for date and event
+        // Throw InvalidEventDataException if the data is invalid
+
+        if (date == null || date.isEmpty()) {
+            throw new ExceptionHandling.InvalidEventDataException("Date cannot be empty");
+        }
+
+        if (event == null || event.isEmpty()) {
+            throw new ExceptionHandling.InvalidEventDataException("Event cannot be empty");
         }
     }
     @Override

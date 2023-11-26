@@ -160,4 +160,23 @@ public class CSVHandler {
             e.printStackTrace(); // Handle the exception according to your needs
         }
     }
+    public static void saveEventsToCsv(Map<String, List<String>> calendarEvents) {
+        try (FileWriter writer = new FileWriter("EVENTS_Calender.csv")) {
+            // Write header
+            writer.write("Date,Event\n");
+
+            // Write data
+            for (Map.Entry<String, List<String>> entry : calendarEvents.entrySet()) {
+                String date = entry.getKey();
+                for (String event : entry.getValue()) {
+                    String line = String.format("%s,%s\n", date, event);
+                    writer.write(line);
+                }
+            }
+
+            System.out.println("Events written to CSV successfully.");
+        } catch (IOException e) {
+            System.err.println("Error writing events to CSV: " + e.getMessage());
+        }
+    }
 }

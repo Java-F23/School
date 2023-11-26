@@ -51,7 +51,11 @@ public class ExceptionHandling {
             super(message);
         }
     }
-
+    public static class InvalidEventDataException extends Exception {
+        public InvalidEventDataException(String message) {
+            super(message);
+        }
+    }
     public static void handleDuplicateCourseException(String courseTitle) {
         System.err.println("Error: Course with title '" + courseTitle + "' already exists.");
     }
@@ -90,4 +94,11 @@ public class ExceptionHandling {
         System.err.println("Student is not enrolled in this course.");
 
     }
+
+    public static void handleInvalidEventDataException(String errorMessage) {
+            System.err.println("Invalid Event Data Exception: " + errorMessage);
+            // You can add additional logic here if needed, such as logging or user notification.
+    }
+
+
 }
