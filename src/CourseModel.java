@@ -13,7 +13,7 @@ public class CourseModel {
     private Schedule schedule;
     private ArrayList<Assignment> assignments;
     private HashMap<String, BigDecimal> grades; // HashMap to store grades with student names
-    private ArrayList<Student> enrolledStudents;
+    private ArrayList<StudentModel> enrolledStudents;
 
     // Constructor
     public CourseModel(String courseTitle, String courseSubject, String department, InstructorModel instructor,
@@ -67,7 +67,7 @@ public class CourseModel {
         return grades;
     }
 
-    public ArrayList<Student> getEnrolledStudents() {
+    public ArrayList<StudentModel> getEnrolledStudents() {
         return enrolledStudents;
     }
 
@@ -110,13 +110,13 @@ public class CourseModel {
         assignments.remove(assignment);
     }
 
-    public void enrollStudent(Student student) {
+    public void enrollStudent(StudentModel student) {
         enrolledStudents.add(student);
     }
-    public void removeStudent(Student student) {
+    public void removeStudent(StudentModel student) {
         enrolledStudents.remove(student);
     }
-    public void assignGrade(Student student, BigDecimal grade) {
+    public void assignGrade(StudentModel student, BigDecimal grade) {
         grades.put(student.getName(), grade);
     }
 

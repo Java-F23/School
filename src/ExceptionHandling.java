@@ -96,10 +96,22 @@ public class ExceptionHandling {
         System.err.println("Student is not enrolled in this course.");
 
     }
+    public static void handleNoFavoriteCourses() {
+        // Handle the case when there are no favorite courses
+        // For example, show a message on the GUI
+        // You can customize this method based on your application's requirements
+        System.out.println("No favorite courses available.");
+    }
 
     public static void handleInvalidEventDataException(String errorMessage) {
             System.err.println("Invalid Event Data Exception: " + errorMessage);
             // You can add additional logic here if needed, such as logging or user notification.
+    }
+    public static void handleEnrollmentError() {
+        // Handle the case when the course is already enrolled or not found
+        // You can customize this method based on your application's requirements
+        // For example, log an error or show a message on the GUI
+        System.out.println("Error enrolling in course: Course is already enrolled or not found.");
     }
 
     // Validation method
@@ -155,7 +167,7 @@ public class ExceptionHandling {
         }
     }
 
-    public static void validateStudent(Student student) throws ExceptionHandling.InvalidStudentDataException {
+    public static void validateStudent(StudentModel student) throws ExceptionHandling.InvalidStudentDataException {
         // Implement validation logic for student data
         // Throw InvalidStudentDataException if the data is invalid
 

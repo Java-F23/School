@@ -5,19 +5,14 @@ import java.util.Map;
 import java.math.BigDecimal;
 import javax.swing.JOptionPane;
 
-
-
-
 public class AdministratorModel {
-
 
     private static ArrayList<CourseModel> courses;
     private  ArrayList<InstructorModel> instructors;
     private static Map<String, List<CourseModel>> coursesByDepartment;
-    private Map<String, List<Student>> studentEnrollment;
+    private Map<String, List<StudentModel>> studentEnrollment;
     private Map<String, List<Assignment>> classAssignments;
     private Map<String, List<String>> calendarEvents;
-
 
     public AdministratorModel() {
         this.courses = new ArrayList<>();
@@ -45,12 +40,10 @@ public class AdministratorModel {
             if (courses.contains(course)) {
                 throw new ExceptionHandling.DuplicateCourseException(course.getCourseTitle());
             }
-
             // Add the course if validation passes
             courses.add(course);
             addToDepartmentMap(course);
             // Add the new course to the CSV file
-
             CSVHandler.writeCoursesToCsv(courses, "courses.csv");
 
             AdministratorView.displayCourseAddedMessage(course.getCourseTitle());
@@ -79,8 +72,6 @@ public class AdministratorModel {
             // Update department map
             updateDepartmentMap(oldCourse, newCourse);
             CSVHandler.editCourseInCsv(oldCourse, newCourse, "courses.csv");
-
-            System.out.println("Course edited successfully.");
         } catch (ExceptionHandling.CourseNotFoundException e) {
             ExceptionHandling.handleCourseNotFoundException(e.getMessage());
         } catch (ExceptionHandling.InvalidDataException e) {
@@ -180,18 +171,19 @@ public class AdministratorModel {
 
 
     // Track and manage student enrollment
-    public void enrollStudentInCourse(Student student, CourseModel course) {
+    public void enrollStudentInCourse(StudentModel student, CourseModel course) {
        try{
            String courseTitle = course.getCourseTitle();
         // Check if the student is already enrolled in the course
-        List<Student> enrolledStudents = studentEnrollment.computeIfAbsent(courseTitle, k -> new ArrayList<>());
+        List<StudentModel> enrolledStudents = studentEnrollment.computeIfAbsent(courseTitle, k -> new ArrayList<>());
         if (!enrolledStudents.contains(student)) {
             ExceptionHandling.validateStudent(student);
             enrolledStudents.add(student);
         } else {
             throw new ExceptionHandling.StudentAlreadyEnrolledException("Student " + student.getName() + " is already enrolled in the course " + courseTitle);
         }
-        } catch (ExceptionHandling.StudentAlreadyEnrolledException e) {
+
+       } catch (ExceptionHandling.StudentAlreadyEnrolledException e) {
            ExceptionHandling.handleStudentAlreadyEnrolledException(e.getMessage());
         }
          catch(ExceptionHandling.InvalidStudentDataException e) {
@@ -200,7 +192,7 @@ public class AdministratorModel {
     }
 
 
-    public void removeStudentFromCourse(Student student, CourseModel course) {
+    public void removeStudentFromCourse(StudentModel student, CourseModel course) {
         String courseTitle = course.getCourseTitle();
         // Check if the student is enrolled in the course
         studentEnrollment.computeIfPresent(courseTitle, (k, v) -> {
@@ -233,7 +225,7 @@ public class AdministratorModel {
         List<CourseModel> enrolledCourses = new ArrayList<>();
         String studentName = student.getName();
 
-        for (Map.Entry<String, List<Student>> entry : studentEnrollment.entrySet()) {
+        for (Map.Entry<String, List<StudentModel>> entry : studentEnrollment.entrySet()) {
             if (entry.getValue().stream().anyMatch(s -> s.getName().equals(studentName))) {
                 enrolledCourses.add(getCourseByTitle(entry.getKey()));
             }

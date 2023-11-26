@@ -57,10 +57,10 @@ public class AdministratorView extends JFrame {
         JMenu studentsMenu = new JMenu("Students");
         menuBar.add(studentsMenu);
 
-        JMenuItem manageEnrollmentItem = new JMenuItem("Track and manage student enrollment");
+        JMenuItem Enroll_student = new JMenuItem("Enroll student in a course");
         JMenuItem manageAssignmentItem = new JMenuItem("Track and manage class assignment");
         JMenuItem calculateGPAItem = new JMenuItem("Calculate students' GPA");
-        studentsMenu.add(manageEnrollmentItem);
+        studentsMenu.add(Enroll_student);
         studentsMenu.add(manageAssignmentItem);
         studentsMenu.add(calculateGPAItem);
 
@@ -78,6 +78,12 @@ public class AdministratorView extends JFrame {
                 AdministratorControl.addNewCourse(); // Delegate to the controller
             }
         });
+        Enroll_student.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AdministratorControl.enrollStudent(); // Delegate to the controller
+            }
+        });
     }
 
     private void handleMenuAction(ActionEvent event) {
@@ -87,7 +93,7 @@ public class AdministratorView extends JFrame {
             case "Add a new course":
                 AdministratorControl.addNewCourse(); // Delegate to the controller
                 break;
-            case "enrollStudent":
+            case "Enroll student in a course":
                 AdministratorControl.enrollStudent(); // Delegate to the controller
                 break;
 //            case "addInstructor":

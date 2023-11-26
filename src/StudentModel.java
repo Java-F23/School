@@ -27,16 +27,22 @@ public class StudentModel {
         return courseTitles;
     }
 
-    public CourseModel searchCourse(List<CourseModel> allCourses, String courseTitle) {
-        for (CourseModel course : allCourses) {
-            if (course.getCourseTitle().equalsIgnoreCase(courseTitle)) {
-                return course;
+    public void  searchCourse(List<CourseModel> allCourses, String courseTitle) {
+        try {
+
+            for (CourseModel course : allCourses) {
+                if (!course.getCourseTitle().equalsIgnoreCase(courseTitle)) {
+                    throw new ExceptionHandling.CourseNotFoundException(" Course not found.");
+                }
             }
+        } catch (ExceptionHandling.CourseNotFoundException e) {
+            ExceptionHandling.handleCourseNotFoundException(e.getMessage());
         }
-        return null;
     }
 
-    public String viewCourseDetails(CourseModel course) {
+
+
+    public void viewCourseDetails(CourseModel course) {
         StringBuilder courseDetails = new StringBuilder();
         try {
             // Validate the course before displaying details
@@ -46,13 +52,11 @@ public class StudentModel {
                 courseDetails.append("Course Details:\n");
                 courseDetails.append("Title: ").append(course.getCourseTitle()).append("\n");
                 courseDetails.append("Subject: ").append(course.getCourseSubject()).append("\n");
-                // Add other details as needed
             }
         } catch (ExceptionHandling.InvalidDataException e) {
             // Handle the exception, or just return an error message
             courseDetails.append("Error: ").append(e.getMessage());
         }
-        return courseDetails.toString();
     }
 
     public String viewCourseSchedule(CourseModel course) {
@@ -75,13 +79,21 @@ public class StudentModel {
 
     // Methods for managing favorite courses
     public void markAsFavorite(CourseModel course) {
-        if (course != null && !favoriteCourses.contains(course)) {
-            favoriteCourses.add(course);
-            System.out.println("Marked as favorite: " + course.getCourseTitle());
-        } else {
-            System.out.println("Course is already a favorite or not found.");
+        try {
+            ExceptionHandling.validateCourse(course);
+
+            if (course != null && !favoriteCourses.contains(course)) {
+                favoriteCourses.add(course);
+                System.out.println("Marked as favorite: " + course.getCourseTitle());
+            } else {
+                System.out.println("Course is already a favorite or not found.");
+            }
+        } catch (ExceptionHandling.InvalidDataException e) {
+            // Log or handle the exception as needed
+            System.err.println("Error marking as favorite: " + e.getMessage());
         }
     }
+
 
     public void printFavoriteCourses() {
         if (favoriteCourses.isEmpty()) {
@@ -96,13 +108,27 @@ public class StudentModel {
 
     // Methods for enrollment and grades
     public void enrollInCourse(CourseModel course) {
-        if (course != null && !courseList.contains(course)) {
-            courseList.add(course);
-            System.out.println("Enrolled in course: " + course.getCourseTitle());
-        } else {
-            System.out.println("Course is already enrolled or not found.");
+        try {
+            // Validate the course before enrolling
+            ExceptionHandling.validateCourse(course);
+
+            if (course != null && !courseList.contains(course)) {
+
+                courseList.add(course);
+
+                // Save the updated course list to CSV
+                CSVHandler.writeCoursesToCsv(courseList, "enrolled_courses.csv");
+
+            } else {
+                // Handle the case when the course is already enrolled or not found
+                ExceptionHandling.handleEnrollmentError();
+            }
+        } catch (ExceptionHandling.InvalidDataException e) {
+            // Log or handle the exception as needed
+            System.err.println("Error enrolling in course: " + e.getMessage());
         }
     }
+
 
     public void printMyCourses() {
         if (courseList.isEmpty()) {
@@ -141,7 +167,17 @@ public class StudentModel {
     }
 
     public List<CourseModel> getFavoriteCourses() {
-        return favoriteCourses;
+        try {
+            // Assuming the validation for each course in the list
+            for (CourseModel course : favoriteCourses) {
+                ExceptionHandling.validateCourse(course);
+            }
+            return favoriteCourses;
+        } catch (ExceptionHandling.InvalidDataException e) {
+            // Log or handle the exception as needed
+            ExceptionHandling.handleNoFavoriteCourses();
+            return new ArrayList<>(); // Return an empty list in case of an exception
+        }
     }
 
     public BigDecimal getGPA() {
