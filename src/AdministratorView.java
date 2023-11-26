@@ -29,6 +29,16 @@ public class AdministratorView extends JFrame {
                 loginFrame.setVisible(true); // Open the login frame
             }
         });
+        JPanel mainpanel = new JPanel(new BorderLayout());
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        topPanel.add(welcomeLabel);
+        mainpanel.add(topPanel, BorderLayout.CENTER);
+        mainpanel.add(logoutButton, BorderLayout.SOUTH);
+
+        add(mainpanel);
+
+        setResizable(false);
+        setVisible(true);
         menuBar = new JMenuBar();
         setJMenuBar(menuBar);
 
@@ -60,8 +70,33 @@ public class AdministratorView extends JFrame {
 
         JMenuItem addRemoveInstructorItem = new JMenuItem("Add or remove an instructor");
         instructorsMenu.add(addRemoveInstructorItem);
-
         setVisible(true);
 
+        addCourseItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AdministratorControl.addNewCourse(); // Delegate to the controller
+            }
+        });
+    }
+
+    private void handleMenuAction(ActionEvent event) {
+        String actionCommand = event.getActionCommand();
+
+        switch (actionCommand) {
+            case "Add a new course":
+                AdministratorControl.addNewCourse(); // Delegate to the controller
+                break;
+            case "enrollStudent":
+                AdministratorControl.enrollStudent(); // Delegate to the controller
+                break;
+//            case "addInstructor":
+//                AdministratorControl.addInstructor(); // Delegate to the controller
+//                break;
+            // Add more cases for other actions...
+        }
+    }
+    public static void displayCourseAddedMessage(String courseTitle) {
+        JOptionPane.showMessageDialog(null, "Course '" + courseTitle + "' added successfully!");
     }
 }

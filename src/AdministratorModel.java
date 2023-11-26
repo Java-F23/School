@@ -3,45 +3,57 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.math.BigDecimal;
+import javax.swing.JOptionPane;
+
 
 
 
 public class AdministratorModel {
-    private ArrayList<CourseModel> courses;
-    private ArrayList<InstructorModel> instructors;
-    private Map<String, List<CourseModel>> coursesByDepartment;
+
+
+    private static ArrayList<CourseModel> courses;
+    private  ArrayList<InstructorModel> instructors;
+    private static Map<String, List<CourseModel>> coursesByDepartment;
     private Map<String, List<Student>> studentEnrollment;
     private Map<String, List<Assignment>> classAssignments;
     private Map<String, List<String>> calendarEvents;
 
+
     public AdministratorModel() {
         this.courses = new ArrayList<>();
         this.instructors = new ArrayList<>();
+        InstructorModel instructor1 = new InstructorModel("Ahmed");
+        System.out.println(getInstructors());
+        instructors.add(instructor1);
         this.coursesByDepartment = new HashMap<>();
         this.studentEnrollment = new HashMap<>();
         this.classAssignments = new HashMap<>();
         this.calendarEvents = new HashMap<>();
     }
+    public  ArrayList<InstructorModel> getInstructors() {
+        return instructors;
+    }
 
     // Methods to modify the state
 
     // Add a new course
-    public void addNewCourse(CourseModel course) {
+    public static void addNewCourse(CourseModel course) {
         try {
+            // Validate the course data
+            ExceptionHandling.validateCourse(course);
             // Check if the course already exists
             if (courses.contains(course)) {
                 throw new ExceptionHandling.DuplicateCourseException(course.getCourseTitle());
             }
 
-            // Validate the course data
-            validateCourse(course);
-
             // Add the course if validation passes
             courses.add(course);
             addToDepartmentMap(course);
             // Add the new course to the CSV file
+
             CSVHandler.writeCoursesToCsv(courses, "courses.csv");
-            System.out.println("Course added successfully.");
+
+            AdministratorView.displayCourseAddedMessage(course.getCourseTitle());
         } catch (ExceptionHandling.DuplicateCourseException e) {
             ExceptionHandling.handleDuplicateCourseException(e.getMessage());
         } catch (ExceptionHandling.InvalidDataException e) {
@@ -58,7 +70,7 @@ public class AdministratorModel {
             }
 
             // Validate data for the new course
-            validateCourse(newCourse);
+            ExceptionHandling.validateCourse(newCourse);
 
             // Remove the old course and add the new course
             courses.remove(oldCourse);
@@ -83,7 +95,7 @@ public class AdministratorModel {
             }
 
             // Validate data for the course (optional, depending on your requirements)
-             validateCourse(courseToRemove);
+            ExceptionHandling.validateCourse(courseToRemove);
 
             // Remove the course if validation passes
             courses.remove(courseToRemove);
@@ -108,7 +120,7 @@ public class AdministratorModel {
             }
 
             // Validate data for the new instructor
-            validateInstructor(instructor);
+            ExceptionHandling.validateInstructor(instructor);
 
             // Add the instructor if validation passes
             instructors.add(instructor);
@@ -130,7 +142,7 @@ public class AdministratorModel {
             }
 
             // Validate data for the instructor (optional, depending on your requirements)
-             validateInstructor(instructor);
+            ExceptionHandling.validateInstructor(instructor);
 
             // Remove the instructor if validation passes
             instructors.remove(instructor);
@@ -145,10 +157,10 @@ public class AdministratorModel {
     }
 
     // Categorize courses by department
-    private void addToDepartmentMap(CourseModel course) {
+    private static void addToDepartmentMap(CourseModel course) {
         String department = course.getDepartment();
         coursesByDepartment.computeIfAbsent(department, k -> new ArrayList<>()).add(course);
-        // Add this line to save courses to CSV by department
+        // Save courses to CSV by department
         CSVHandler.saveCoursesByDepartmentToCSV(coursesByDepartment, "courses_by_department.csv");
     }
 
@@ -174,7 +186,7 @@ public class AdministratorModel {
         // Check if the student is already enrolled in the course
         List<Student> enrolledStudents = studentEnrollment.computeIfAbsent(courseTitle, k -> new ArrayList<>());
         if (!enrolledStudents.contains(student)) {
-            validateStudent(student);
+            ExceptionHandling.validateStudent(student);
             enrolledStudents.add(student);
         } else {
             throw new ExceptionHandling.StudentAlreadyEnrolledException("Student " + student.getName() + " is already enrolled in the course " + courseTitle);
@@ -194,7 +206,7 @@ public class AdministratorModel {
         studentEnrollment.computeIfPresent(courseTitle, (k, v) -> {
             try {
                 //Validate the administrator input
-                validateStudent(student);
+                ExceptionHandling.validateStudent(student);
                 if (v.remove(student)) {
                     return v.isEmpty() ? null : v;
                 } else {
@@ -229,7 +241,7 @@ public class AdministratorModel {
         return enrolledCourses;
     }
 
-    private CourseModel getCourseByTitle(String courseTitle) {
+    public static CourseModel getCourseByTitle(String courseTitle) {
         return courses.stream().filter(course -> course.getCourseTitle().equals(courseTitle)).findFirst().orElse(null);
     }
 
@@ -279,7 +291,7 @@ public class AdministratorModel {
     // Add/remove events in the calendar
     public void addEventToCalendar(String date, String event) {
         try {
-            validateEventData(date, event);
+            ExceptionHandling.validateEventData(date, event);
 
             // Check if the date already has events
             List<String> events = calendarEvents.computeIfAbsent(date, k -> new ArrayList<>());
@@ -297,7 +309,7 @@ public class AdministratorModel {
 
     public void removeEventFromCalendar(String date, String event) {
         try {
-            validateEventData(date, event);
+            ExceptionHandling.validateEventData(date, event);
 
             // Check if the date has events
             calendarEvents.computeIfPresent(date, (k, v) -> {
@@ -327,41 +339,8 @@ public class AdministratorModel {
     }
 
 
-    // Validation method
-    private void validateCourse(CourseModel course) throws ExceptionHandling.InvalidDataException {
-        // Implement validation logic for course data
-        // Throw InvalidDataException if the data is invalid
-        if (course.getCourseTitle() == null || course.getCourseTitle().isEmpty()) {
-            throw new ExceptionHandling.InvalidDataException("Course title cannot be empty");
-        }
-    }
-    private void validateInstructor(InstructorModel instructor) throws ExceptionHandling.InvalidInstructorDataException {
-        // Implement validation logic for instructor data
-        // Throw InvalidInstructorDataException if the data is invalid
 
-        if (instructor.getName() == null || instructor.getName().isEmpty()) {
-            throw new ExceptionHandling.InvalidInstructorDataException("Instructor name cannot be empty");
-        }
-    }
 
-    private void validateStudent(Student student) throws ExceptionHandling.InvalidStudentDataException {
-        if (student == null || student.getName() == null || student.getName().isEmpty()) {
-            throw new ExceptionHandling.InvalidStudentDataException("Invalid student data");
-        }
-    }
-    // Validation method for event data
-    private void validateEventData(String date, String event) throws ExceptionHandling.InvalidEventDataException {
-        // Implement validation logic for date and event
-        // Throw InvalidEventDataException if the data is invalid
-
-        if (date == null || date.isEmpty()) {
-            throw new ExceptionHandling.InvalidEventDataException("Date cannot be empty");
-        }
-
-        if (event == null || event.isEmpty()) {
-            throw new ExceptionHandling.InvalidEventDataException("Event cannot be empty");
-        }
-    }
     @Override
     public String toString() {
         return "AdministratorModel{" +

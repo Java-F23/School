@@ -48,7 +48,7 @@ public class LoginFrame extends JFrame {
                            // studentWelcome.setVisible(true);
                             dispose();
                         } else if (adminButton.isSelected()) {
-                            AdministratorWelcomeFrame adminWelcome = new AdministratorWelcomeFrame(name);
+                            AdministratorView adminWelcome = new AdministratorView(name);
                            // adminWelcome.setVisible(true);
                             dispose();
                         }

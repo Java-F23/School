@@ -1,4 +1,5 @@
 import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,10 +9,13 @@ import java.util.Map;
 public class CSVHandler {
 
     public static void writeCoursesToCsv(List<CourseModel> courses, String csvFilePath) {
-        try (FileWriter writer = new FileWriter(csvFilePath)) {
-            // Write CSV header
-            writer.append("CourseTitle,CourseSubject,Department,Instructor,Content,Level,Schedule\n");
+        try (FileWriter writer = new FileWriter(csvFilePath,true)) {
+            File file = new File("courses.csv");
 
+            if (file.length() == 0) {
+                // Write the header only if the file is empty
+                writer.write("Department,CourseTitle,CourseSubject,Instructor,Content,Level,Schedule\n");
+            }
             // Write each course to CSV
             for (CourseModel course : courses) {
                 writer.append(String.format("%s,%s,%s,%s,%s,%d,%s\n",
@@ -107,10 +111,15 @@ public class CSVHandler {
     // Add this method to save courses by department to a CSV file
     // Updated method without importing BufferedWriter
     public static void saveCoursesByDepartmentToCSV(Map<String, List<CourseModel>> coursesByDepartment, String filePath) {
-        try (FileWriter writer = new FileWriter(filePath)) {
-            // Write header
-            writer.write("Department,CourseTitle,CourseSubject,Instructor,Content,Level,Schedule\n");
+        try (FileWriter writer = new FileWriter(filePath,true)) {
 
+                // Write header
+            File file = new File("courses_by_department.csv");
+
+            if (file.length() == 0) {
+                // Write the header only if the file is empty
+                writer.write("Department,CourseTitle,CourseSubject,Instructor,Content,Level,Schedule\n");
+            }
             // Write data
             for (Map.Entry<String, List<CourseModel>> entry : coursesByDepartment.entrySet()) {
                 String department = entry.getKey();
@@ -133,10 +142,14 @@ public class CSVHandler {
     // Add this new method to update the department map in the CSV file
     // Updated method to update the department map in the CSV file
     public static void updateDepartmentMapInCSV(Map<String, List<CourseModel>> coursesByDepartment, String oldDepartment, CourseModel oldCourse, String newDepartment, CourseModel newCourse, String filePath) {
-        try (FileWriter writer = new FileWriter(filePath)) {
+        try (FileWriter writer = new FileWriter(filePath,true)) {
             // Write header
-            writer.write("Department,CourseTitle,CourseSubject,Instructor,Content,Level,Schedule\n");
+            File file = new File("courses_by_department.csv");
 
+            if (file.length() == 0) {
+                // Write the header only if the file is empty
+                writer.write("Department,CourseTitle,CourseSubject,Instructor,Content,Level,Schedule\n");
+            }
             // Write data
             for (Map.Entry<String, List<CourseModel>> entry : coursesByDepartment.entrySet()) {
                 String department = entry.getKey();
@@ -161,9 +174,14 @@ public class CSVHandler {
         }
     }
     public static void saveEventsToCsv(Map<String, List<String>> calendarEvents) {
-        try (FileWriter writer = new FileWriter("EVENTS_Calender.csv")) {
+        try (FileWriter writer = new FileWriter("EVENTS_Calender.csv",true)) {
             // Write header
-            writer.write("Date,Event\n");
+            File file = new File("EVENTS_Calender.csv");
+
+            if (file.length() == 0) {
+                // Write the header only if the file is empty
+                writer.write("Date,Event\n");
+            }
 
             // Write data
             for (Map.Entry<String, List<String>> entry : calendarEvents.entrySet()) {

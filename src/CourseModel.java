@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.math.BigDecimal;
+import java.util.List;
 
 public class CourseModel {
     private String courseTitle;
@@ -119,6 +120,19 @@ public class CourseModel {
         grades.put(student.getName(), grade);
     }
 
+    // Static method to get a course by title
+    public static CourseModel getCourseByTitle(List<CourseModel> courses, String courseTitle) throws ExceptionHandling.CourseNotFoundException {
+        CourseModel course = courses.stream()
+                .filter(c -> c.getCourseTitle().equals(courseTitle))
+                .findFirst()
+                .orElse(null);
+
+        if (course == null) {
+            throw new ExceptionHandling.CourseNotFoundException("Course not found: " + courseTitle);
+        }
+
+        return course;
+    }
     @Override
     public String toString() {
         return "CourseControl{" +
