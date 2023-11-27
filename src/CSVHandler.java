@@ -1,5 +1,7 @@
 import java.io.FileWriter;
+import java.io.FileReader;
 import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -197,4 +199,51 @@ public class CSVHandler {
             System.err.println("Error writing events to CSV: " + e.getMessage());
         }
     }
+    public static void writeStudentsToCsv(List<StudentModel> students,String courseName, String fileName) {
+        try (FileWriter writer = new FileWriter(fileName)) {
+            // Assuming StudentModel has appropriate getters for name, courseList, favCourses, GPA, etc.
+            writer.write("Name,Course\n");
+            for (StudentModel student : students) {
+                String line = String.format("%s,%s,%s,%f\n",
+                        student.getName(),courseName);
+                writer.write(line);
+            }
+        } catch (IOException e) {
+            // Handle the exception (e.g., log or display an error message)
+            e.printStackTrace();
+        }
+    }
+    private void loadCoursesFromCsv(String csvFilePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Split the line into individual fields
+                String[] fields = line.split(",");
+
+                // Extract information from fields
+                String department = fields[0];
+                String courseTitle = fields[1];
+                String courseSubject = fields[2];
+                String Insrtructor = fields[3];
+                InstructorModel instructor= new InstructorModel(Insrtructor);
+                String content = fields[4];
+                int level= Integer.parseInt(fields[5]);
+                String schedule= fields[6];
+                String[] scheduleParts = schedule.split(",");
+                String day = scheduleParts[0].trim();
+                int time = Integer.parseInt(scheduleParts[1].trim());
+                Schedule x=new Schedule(day,time);
+
+                // Create a CourseModel object
+                CourseModel course = new CourseModel(courseTitle,courseSubject,department,instructor,content,level,x);
+
+                // Add the CourseModel object to the courses list
+                AdministratorModel.getCourses().add(course);
+            }
+        } catch (IOException e) {
+            // Handle the exception (e.g., log an error)
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -86,22 +86,6 @@ public class AdministratorView extends JFrame {
         });
     }
 
-    private void handleMenuAction(ActionEvent event) {
-        String actionCommand = event.getActionCommand();
-
-        switch (actionCommand) {
-            case "Add a new course":
-                AdministratorControl.addNewCourse(); // Delegate to the controller
-                break;
-            case "Enroll student in a course":
-                AdministratorControl.enrollStudent(); // Delegate to the controller
-                break;
-//            case "addInstructor":
-//                AdministratorControl.addInstructor(); // Delegate to the controller
-//                break;
-            // Add more cases for other actions...
-        }
-    }
     public static void displayCourseAddedMessage(String courseTitle) {
         JOptionPane.showMessageDialog(null, "Course '" + courseTitle + "' added successfully!");
     }

@@ -28,19 +28,33 @@ public class AdministratorControl {
         adminModel.addNewCourse(newCourse);
     }
     public static void enrollStudent() {
-        // Taking data from user
+      try{
+          // Taking data from user
         String studentName = JOptionPane.showInputDialog("Enter student name:");
         String courseTitle = JOptionPane.showInputDialog("Enter course title:");
 
         // Get the student and course objects
-        StudentModel student = new StudentModel(studentName);
+          StudentModel student = new StudentModel(studentName);
         CourseModel course = AdministratorModel.getCourseByTitle(courseTitle);
+        System.out.println(AdministratorModel.getCourses());
+        if (!AdministratorModel.getCourses().contains(course)) {
+            System.out.println("in AdminControl enroll student");
+            throw new ExceptionHandling.CourseNotFoundException("Course not found.");
+        }
+        if(adminModel == null)
+          {
+              adminModel = new AdministratorModel();
+          }
+          // Enroll the student in the course
+          adminModel.enrollStudentInCourse(student, course);
 
-        // Enroll the student in the course
-        adminModel.enrollStudentInCourse(student, course);
+          // Display success message
+          JOptionPane.showMessageDialog(null, "Student '" + studentName + "' enrolled in course '" + courseTitle + "' successfully!");
 
-        // Display success message
-        JOptionPane.showMessageDialog(null, "Student '" + studentName + "' enrolled in course '" + courseTitle + "' successfully!");
+      } catch(ExceptionHandling.CourseNotFoundException e) {
+          System.out.println("in AdminControl handel enroll student");
+          ExceptionHandling.handleCourseNotFoundException(e.getMessage());
+      }
 
     }
 }

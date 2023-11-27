@@ -17,26 +17,28 @@ public class AdministratorModel {
     public AdministratorModel() {
         this.courses = new ArrayList<>();
         this.instructors = new ArrayList<>();
-        InstructorModel instructor1 = new InstructorModel("Ahmed");
-        System.out.println(getInstructors());
-        instructors.add(instructor1);
         this.coursesByDepartment = new HashMap<>();
         this.studentEnrollment = new HashMap<>();
         this.classAssignments = new HashMap<>();
         this.calendarEvents = new HashMap<>();
+        // Load courses from CSV file
+//        CSVHandler.loadCoursesFromCsv("courses.csv");
     }
     public  ArrayList<InstructorModel> getInstructors() {
         return instructors;
     }
-
-    // Methods to modify the state
-
+    public static ArrayList<CourseModel> getCourses() {
+        return courses;
+    }
     // Add a new course
     public static void addNewCourse(CourseModel course) {
         try {
             // Validate the course data
             ExceptionHandling.validateCourse(course);
-            // Check if the course already exists
+            if (courses == null) {
+                courses = new ArrayList<>();
+            }
+          //   Check if the course already exists
             if (courses.contains(course)) {
                 throw new ExceptionHandling.DuplicateCourseException(course.getCourseTitle());
             }
@@ -150,6 +152,11 @@ public class AdministratorModel {
     // Categorize courses by department
     private static void addToDepartmentMap(CourseModel course) {
         String department = course.getDepartment();
+        if (coursesByDepartment == null)
+        {
+            coursesByDepartment = new HashMap<>();
+
+        }
         coursesByDepartment.computeIfAbsent(department, k -> new ArrayList<>()).add(course);
         // Save courses to CSV by department
         CSVHandler.saveCoursesByDepartmentToCSV(coursesByDepartment, "courses_by_department.csv");
@@ -179,16 +186,24 @@ public class AdministratorModel {
         if (!enrolledStudents.contains(student)) {
             ExceptionHandling.validateStudent(student);
             enrolledStudents.add(student);
+            CSVHandler.writeStudentsToCsv(enrolledStudents,course.getCourseTitle(), "EnrolledStudentsInCourse.csv");
+
+
         } else {
             throw new ExceptionHandling.StudentAlreadyEnrolledException("Student " + student.getName() + " is already enrolled in the course " + courseTitle);
+        }
+        if (!courses.contains(course)) {
+               throw new ExceptionHandling.CourseNotFoundException("Course not found.");
         }
 
        } catch (ExceptionHandling.StudentAlreadyEnrolledException e) {
            ExceptionHandling.handleStudentAlreadyEnrolledException(e.getMessage());
-        }
+       }
          catch(ExceptionHandling.InvalidStudentDataException e) {
             ExceptionHandling.handleStudentNotEnrolledException(e.getMessage());
-        }
+       } catch (ExceptionHandling.CourseNotFoundException e) {
+           ExceptionHandling.handleCourseNotFoundException(e.getMessage());
+       }
     }
 
 
@@ -234,6 +249,10 @@ public class AdministratorModel {
     }
 
     public static CourseModel getCourseByTitle(String courseTitle) {
+        if (courses==null)
+        {
+            courses = new ArrayList<>();
+        }
         return courses.stream().filter(course -> course.getCourseTitle().equals(courseTitle)).findFirst().orElse(null);
     }
 

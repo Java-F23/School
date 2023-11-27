@@ -88,12 +88,10 @@ public class ExceptionHandling {
     public static void handleStudentAlreadyEnrolledException(String message) {
         // Custom handling for StudentAlreadyEnrolledException
         System.err.println("Error: " + message);
-        System.err.println("Student is already enrolled in this course.");
     }
     public static void handleStudentNotEnrolledException(String message) {
         // Custom handling for StudentNotEnrolledException
         System.err.println("Error: " + message);
-        System.err.println("Student is not enrolled in this course.");
 
     }
     public static void handleNoFavoriteCourses() {
