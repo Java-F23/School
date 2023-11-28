@@ -35,9 +35,9 @@ public class AdministratorControl {
 
         // Get the student and course objects
           StudentModel student = new StudentModel(studentName);
-        CourseModel course = AdministratorModel.getCourseByTitle(courseTitle);
-        System.out.println(AdministratorModel.getCourses());
-        if (!AdministratorModel.getCourses().contains(course)) {
+        CourseModel course = adminModel.getCourseByTitle(courseTitle);
+        System.out.println(adminModel.getCourses());
+        if (!adminModel.getCourses().contains(course)) {
             System.out.println("in AdminControl enroll student");
             throw new ExceptionHandling.CourseNotFoundException("Course not found.");
         }

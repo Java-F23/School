@@ -2,11 +2,13 @@ import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.File;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 public class CSVHandler {
 
@@ -16,7 +18,7 @@ public class CSVHandler {
 
             if (file.length() == 0) {
                 // Write the header only if the file is empty
-                writer.write("Department,CourseTitle,CourseSubject,Instructor,Content,Level,Schedule\n");
+                writer.write("CourseTitle,CourseSubject,Department,Instructor,Content,Level,Schedule\n");
             }
             // Write each course to CSV
             for (CourseModel course : courses) {
@@ -199,22 +201,32 @@ public class CSVHandler {
             System.err.println("Error writing events to CSV: " + e.getMessage());
         }
     }
-    public static void writeStudentsToCsv(List<StudentModel> students,String courseName, String fileName) {
-        try (FileWriter writer = new FileWriter(fileName)) {
-            // Assuming StudentModel has appropriate getters for name, courseList, favCourses, GPA, etc.
-            writer.write("Name,Course\n");
+    public static void writeStudentsToCsv(List<StudentModel> students, String courseName, String fileName) {
+        try (FileWriter writer = new FileWriter(fileName, true);
+             BufferedWriter bufferedWriter = new BufferedWriter(writer)) { // Using BufferedWriter for efficiency
+
+            // Check if the file is empty
+            if (new File(fileName).length() == 0) {
+                bufferedWriter.write("Name,Course\n");
+            }
+
+            // Write student data
             for (StudentModel student : students) {
-                String line = String.format("%s,%s,%s,%f\n",
-                        student.getName(),courseName);
-                writer.write(line);
+                String line = String.format("%s,%s\n", student.getName(), courseName);
+                bufferedWriter.write(line);
             }
         } catch (IOException e) {
             // Handle the exception (e.g., log or display an error message)
             e.printStackTrace();
         }
     }
-    private void loadCoursesFromCsv(String csvFilePath) {
+
+
+    public static void loadCoursesFromCsv(String csvFilePath, ArrayList<CourseModel> courses) {
         try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
+            // Skip the header row
+            reader.readLine();
+
             String line;
             while ((line = reader.readLine()) != null) {
                 // Split the line into individual fields
@@ -224,26 +236,27 @@ public class CSVHandler {
                 String department = fields[0];
                 String courseTitle = fields[1];
                 String courseSubject = fields[2];
-                String Insrtructor = fields[3];
-                InstructorModel instructor= new InstructorModel(Insrtructor);
+                String instructorName = fields[3];
+                InstructorModel instructor = new InstructorModel(instructorName);
                 String content = fields[4];
-                int level= Integer.parseInt(fields[5]);
-                String schedule= fields[6];
-                String[] scheduleParts = schedule.split(",");
+                int level = Integer.parseInt(fields[5]);
+                String schedule = fields[6];
+                String[] scheduleParts = schedule.split("at");
                 String day = scheduleParts[0].trim();
                 int time = Integer.parseInt(scheduleParts[1].trim());
-                Schedule x=new Schedule(day,time);
+                Schedule x = new Schedule(day, time);
 
                 // Create a CourseModel object
-                CourseModel course = new CourseModel(courseTitle,courseSubject,department,instructor,content,level,x);
+                CourseModel course = new CourseModel(courseTitle, courseSubject, department, instructor, content, level, x);
 
                 // Add the CourseModel object to the courses list
-                AdministratorModel.getCourses().add(course);
+                courses.add(course);
             }
         } catch (IOException e) {
             // Handle the exception (e.g., log an error)
             e.printStackTrace();
         }
     }
+
 
 }

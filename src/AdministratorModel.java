@@ -22,7 +22,9 @@ public class AdministratorModel {
         this.classAssignments = new HashMap<>();
         this.calendarEvents = new HashMap<>();
         // Load courses from CSV file
-//        CSVHandler.loadCoursesFromCsv("courses.csv");
+        System.out.println("in admin");
+        CSVHandler.loadCoursesFromCsv("courses.csv",courses);
+        System.out.println(courses);
     }
     public  ArrayList<InstructorModel> getInstructors() {
         return instructors;
@@ -39,6 +41,7 @@ public class AdministratorModel {
                 courses = new ArrayList<>();
             }
           //   Check if the course already exists
+            System.out.println(course);
             if (courses.contains(course)) {
                 throw new ExceptionHandling.DuplicateCourseException(course.getCourseTitle());
             }
