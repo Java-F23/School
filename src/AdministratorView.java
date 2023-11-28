@@ -5,11 +5,14 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import java.time.LocalDate;
+import java.util.Map;
 public class AdministratorView extends JFrame {
     private JMenuBar menuBar;
     private JMenu menu;
     private JButton logoutButton;
     private JLabel welcomeLabel;
+    private JTable departmentMapTable;
+
 
     public AdministratorView(String name) {
         setTitle("Home Page");
@@ -48,9 +51,12 @@ public class AdministratorView extends JFrame {
 
         JMenuItem addCourseItem = new JMenuItem("Add a new course");
         JMenuItem editCourseItem = new JMenuItem("Edit an existing course");
+        JMenuItem removeCourse = new JMenuItem("Remove a course");
+
         JMenuItem categorizeCoursesItem = new JMenuItem("Categorize courses by department");
         coursesMenu.add(addCourseItem);
         coursesMenu.add(editCourseItem);
+        coursesMenu.add(removeCourse);
         coursesMenu.add(categorizeCoursesItem);
 
         // Students Menu
@@ -84,9 +90,29 @@ public class AdministratorView extends JFrame {
                 AdministratorControl.enrollStudent(); // Delegate to the controller
             }
         });
+        editCourseItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AdministratorControl.editExistingCourse(); // Delegate to the controller
+            }
+        });
+        removeCourse.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AdministratorControl.removeCourse(); // Delegate to the controller
+            }
+        });
+
+        categorizeCoursesItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              //  AdministratorControl.addToDepartmentMap();
+            }
+        });
     }
 
     public static void displayCourseAddedMessage(String courseTitle) {
         JOptionPane.showMessageDialog(null, "Course '" + courseTitle + "' added successfully!");
     }
+
 }

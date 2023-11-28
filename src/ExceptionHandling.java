@@ -59,7 +59,8 @@ public class ExceptionHandling {
         }
     }
     public static void handleDuplicateCourseException(String courseTitle) {
-        System.err.println("Error: Course with title '" + courseTitle + "' already exists.");
+        String errorMessage = "Error: Course with title '" + courseTitle + "' already exists.";
+        JOptionPane.showMessageDialog(null, errorMessage, "Duplicate Course Error", JOptionPane.ERROR_MESSAGE);
     }
 
     public static void handleInvalidDataException(String message) {
@@ -67,50 +68,35 @@ public class ExceptionHandling {
     }
 
     public static void handleCourseNotFoundException(String message) {
-        System.err.println("Error: " + message);
-        // You can add additional logic for handling this exception if needed
-    }
+        JOptionPane.showMessageDialog(null, message, "Course not found Error", JOptionPane.ERROR_MESSAGE);    }
 
     public static void handleDuplicateInstructorException(String message) {
-        System.err.println("Error: " + message);
-        // You can add additional logic for handling this exception if needed
-    }
+        JOptionPane.showMessageDialog(null, message, "Duplicate Instructor Error", JOptionPane.ERROR_MESSAGE);}
 
     public static void handleInvalidInstructorDataException(String message) {
-        System.err.println("Invalid instructor data: " + message);
-        // You can add additional logic for handling this exception if needed
-    }
+        JOptionPane.showMessageDialog(null, message, "Invalid instructor data", JOptionPane.ERROR_MESSAGE);    }
+
     public static void handleInstructorNotFoundException(String message) {
-        System.err.println("Error: " + message);
-        // You can add additional logic for handling this exception if needed
-    }
+        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE); }
+
 
     public static void handleStudentAlreadyEnrolledException(String message) {
-        // Custom handling for StudentAlreadyEnrolledException
-        System.err.println("Error: " + message);
-    }
-    public static void handleStudentNotEnrolledException(String message) {
-        // Custom handling for StudentNotEnrolledException
-        System.err.println("Error: " + message);
+        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE); }
 
-    }
+    public static void handleStudentNotEnrolledException(String message) {
+        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE); }
+
     public static void handleNoFavoriteCourses() {
-        // Handle the case when there are no favorite courses
-        // For example, show a message on the GUI
-        // You can customize this method based on your application's requirements
-        System.out.println("No favorite courses available.");
-    }
+        JOptionPane.showMessageDialog(null, "No favorite courses available.", "Error", JOptionPane.ERROR_MESSAGE); }
+
 
     public static void handleInvalidEventDataException(String errorMessage) {
-            System.err.println("Invalid Event Data Exception: " + errorMessage);
-            // You can add additional logic here if needed, such as logging or user notification.
-    }
+
+        JOptionPane.showMessageDialog(null, "Invalid Event Data Exception:", "Error", JOptionPane.ERROR_MESSAGE); }
+
     public static void handleEnrollmentError() {
-        // Handle the case when the course is already enrolled or not found
-        // You can customize this method based on your application's requirements
-        // For example, log an error or show a message on the GUI
-        System.out.println("Error enrolling in course: Course is already enrolled or not found.");
-    }
+
+        JOptionPane.showMessageDialog(null, "Error enrolling in course: Course is already enrolled or not found.", "Error", JOptionPane.ERROR_MESSAGE); }
 
     // Validation method
     public static void validateCourse(CourseModel course) throws ExceptionHandling.InvalidDataException {
@@ -165,15 +151,13 @@ public class ExceptionHandling {
         }
     }
 
-    public static void validateStudent(StudentModel student) throws ExceptionHandling.InvalidStudentDataException {
+    public static void validateStudent(String student) throws ExceptionHandling.InvalidStudentDataException {
         // Implement validation logic for student data
         // Throw InvalidStudentDataException if the data is invalid
 
         StringBuilder errorMessage = new StringBuilder("Error: Invalid student data.\n");
 
-        if (student == null) {
-            errorMessage.append(" - Student data cannot be null\n");
-        } else if (student.getName() == null || student.getName().isEmpty()) {
+        if (student == null || student.isEmpty()) {
             errorMessage.append(" - Student name cannot be empty\n");
         }
 

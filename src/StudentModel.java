@@ -5,14 +5,15 @@ import java.util.Map;
 
 
 public class StudentModel {
+
     private String name;
     private List<CourseModel> courseList;
     private List<CourseModel> favoriteCourses;
+    private List<StudentModel> students;
     private BigDecimal GPA;
     private List<CourseModel> pastCourses;
     private Map<String, List<String>> calendarEvents;
-    public StudentModel(String name) {
-        this.name = name;
+    public StudentModel() {
         this.courseList = new ArrayList<>();
         this.favoriteCourses = new ArrayList<>();
         this.GPA = BigDecimal.ZERO; // Initial GPA is zero
@@ -117,7 +118,7 @@ public class StudentModel {
                 courseList.add(course);
 
                 // Save the updated course list to CSV
-                CSVHandler.writeCoursesToCsv(courseList, "enrolled_courses.csv");
+                CSVHandler.writeCoursesToCsv(course, "enrolled_courses.csv");
 
             } else {
                 // Handle the case when the course is already enrolled or not found
@@ -154,12 +155,28 @@ public class StudentModel {
         // Implement logic to access past classes schedules and performance records
     }
 
-    // Other methods as needed...
+    public StudentModel getStudentByName(String studentName) {
+        if (students == null) {
+            students = new ArrayList<>();
+        }
+
+        for (StudentModel student : students) {
+            if (student.getName().equals(studentName)) {
+                return student;
+            }
+        }
+
+        return null;
+    }
+
 
     // Getters and setters for attributes
 
     public String getName() {
         return name;
+    }
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<CourseModel> getCourseList() {

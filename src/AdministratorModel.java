@@ -6,11 +6,13 @@ import java.math.BigDecimal;
 import javax.swing.JOptionPane;
 
 public class AdministratorModel {
-
     private static ArrayList<CourseModel> courses;
     private  ArrayList<InstructorModel> instructors;
+
+
+
     private static Map<String, List<CourseModel>> coursesByDepartment;
-    private Map<String, List<StudentModel>> studentEnrollment;
+    private Map<String, List<StudentModel>> studentEnrollment; // the key is course name and includes students enrolled in it
     private Map<String, List<Assignment>> classAssignments;
     private Map<String, List<String>> calendarEvents;
 
@@ -23,15 +25,15 @@ public class AdministratorModel {
         this.calendarEvents = new HashMap<>();
         // Load courses from CSV file
         System.out.println("in admin");
-        CSVHandler.loadCoursesFromCsv("courses.csv",courses);
-        System.out.println(courses);
+        CSVHandler.loadCoursesFromCsv("courses.csv");
     }
     public  ArrayList<InstructorModel> getInstructors() {
         return instructors;
     }
-    public static ArrayList<CourseModel> getCourses() {
+    public  ArrayList<CourseModel> getCourses() {
         return courses;
     }
+
     // Add a new course
     public static void addNewCourse(CourseModel course) {
         try {
@@ -41,15 +43,16 @@ public class AdministratorModel {
                 courses = new ArrayList<>();
             }
           //   Check if the course already exists
-            System.out.println(course);
-            if (courses.contains(course)) {
-                throw new ExceptionHandling.DuplicateCourseException(course.getCourseTitle());
+            for (CourseModel existingCourse : courses) {
+                if (existingCourse.getCourseTitle().equals(course.getCourseTitle())) {
+                    throw new ExceptionHandling.DuplicateCourseException(course.getCourseTitle());
+                }
             }
             // Add the course if validation passes
             courses.add(course);
             addToDepartmentMap(course);
             // Add the new course to the CSV file
-            CSVHandler.writeCoursesToCsv(courses, "courses.csv");
+            CSVHandler.writeCoursesToCsv(course, "courses.csv");
 
             AdministratorView.displayCourseAddedMessage(course.getCourseTitle());
         } catch (ExceptionHandling.DuplicateCourseException e) {
@@ -60,13 +63,10 @@ public class AdministratorModel {
     }
 
     // Edit existing course
-    public void editExistingCourse(CourseModel oldCourse, CourseModel newCourse) {
+    public void editExistingCourse(String oldCourseTitle, CourseModel newCourse) {
         try {
             // Check if the old course exists
-            if (!courses.contains(oldCourse)) {
-                throw new ExceptionHandling.CourseNotFoundException("Old course not found.");
-            }
-
+            CourseModel oldCourse = getCourseByTitle(oldCourseTitle);
             // Validate data for the new course
             ExceptionHandling.validateCourse(newCourse);
 
@@ -77,12 +77,12 @@ public class AdministratorModel {
             // Update department map
             updateDepartmentMap(oldCourse, newCourse);
             CSVHandler.editCourseInCsv(oldCourse, newCourse, "courses.csv");
-        } catch (ExceptionHandling.CourseNotFoundException e) {
-            ExceptionHandling.handleCourseNotFoundException(e.getMessage());
+
         } catch (ExceptionHandling.InvalidDataException e) {
             ExceptionHandling.handleInvalidDataException(e.getMessage());
         }
     }
+
     public void removeCourse(CourseModel courseToRemove) {
         try {
             // Check if the course exists
@@ -153,12 +153,12 @@ public class AdministratorModel {
     }
 
     // Categorize courses by department
-    private static void addToDepartmentMap(CourseModel course) {
-        String department = course.getDepartment();
-        if (coursesByDepartment == null)
-        {
-            coursesByDepartment = new HashMap<>();
+    // Inside AdministratorModel class
 
+    public static void addToDepartmentMap(CourseModel course) {
+        String department = course.getDepartment();
+        if (coursesByDepartment == null) {
+            coursesByDepartment = new HashMap<>();
         }
         coursesByDepartment.computeIfAbsent(department, k -> new ArrayList<>()).add(course);
         // Save courses to CSV by department
@@ -182,31 +182,39 @@ public class AdministratorModel {
 
     // Track and manage student enrollment
     public void enrollStudentInCourse(StudentModel student, CourseModel course) {
-       try{
-           String courseTitle = course.getCourseTitle();
-        // Check if the student is already enrolled in the course
-        List<StudentModel> enrolledStudents = studentEnrollment.computeIfAbsent(courseTitle, k -> new ArrayList<>());
-        if (!enrolledStudents.contains(student)) {
-            ExceptionHandling.validateStudent(student);
-            enrolledStudents.add(student);
-            CSVHandler.writeStudentsToCsv(enrolledStudents,course.getCourseTitle(), "EnrolledStudentsInCourse.csv");
+        try {
+            String courseTitle = course.getCourseTitle();
 
+            // Ensure that the enrolledStudents list is initialized for the specific course
+            studentEnrollment.computeIfAbsent(courseTitle, k -> new ArrayList<>());
 
-        } else {
-            throw new ExceptionHandling.StudentAlreadyEnrolledException("Student " + student.getName() + " is already enrolled in the course " + courseTitle);
-        }
-        if (!courses.contains(course)) {
-               throw new ExceptionHandling.CourseNotFoundException("Course not found.");
-        }
+            // Check if the student is already enrolled in the course using stream
+            boolean isAlreadyEnrolled = studentEnrollment.get(courseTitle)
+                    .stream()
+                    .anyMatch(enrolledStudent -> enrolledStudent.equals(student));
 
-       } catch (ExceptionHandling.StudentAlreadyEnrolledException e) {
-           ExceptionHandling.handleStudentAlreadyEnrolledException(e.getMessage());
-       }
-         catch(ExceptionHandling.InvalidStudentDataException e) {
+            if (!isAlreadyEnrolled) {
+                ExceptionHandling.validateStudent(student.getName());
+                studentEnrollment.get(courseTitle).add(student);
+                CSVHandler.writeStudentsToCsv(studentEnrollment.get(courseTitle), courseTitle, "EnrolledStudentsInCourse.csv");
+                // Display success message
+                JOptionPane.showMessageDialog(null, "Student '" + student.getName() + "' enrolled in course '" + courseTitle + "' successfully!");
+
+            } else {
+                throw new ExceptionHandling.StudentAlreadyEnrolledException("Student " + student.getName() + " is already enrolled in the course " + courseTitle);
+            }
+
+            if (!courses.contains(course)) {
+                throw new ExceptionHandling.CourseNotFoundException("Course not found.");
+            }
+
+        } catch (ExceptionHandling.StudentAlreadyEnrolledException e) {
+            ExceptionHandling.handleStudentAlreadyEnrolledException(e.getMessage());
+        } catch (ExceptionHandling.InvalidStudentDataException e) {
             ExceptionHandling.handleStudentNotEnrolledException(e.getMessage());
-       } catch (ExceptionHandling.CourseNotFoundException e) {
-           ExceptionHandling.handleCourseNotFoundException(e.getMessage());
-       }
+        } catch (ExceptionHandling.CourseNotFoundException e) {
+            ExceptionHandling.handleCourseNotFoundException(e.getMessage());
+        }
     }
 
 
@@ -216,7 +224,7 @@ public class AdministratorModel {
         studentEnrollment.computeIfPresent(courseTitle, (k, v) -> {
             try {
                 //Validate the administrator input
-                ExceptionHandling.validateStudent(student);
+                ExceptionHandling.validateStudent(student.getName());
                 if (v.remove(student)) {
                     return v.isEmpty() ? null : v;
                 } else {
@@ -252,12 +260,20 @@ public class AdministratorModel {
     }
 
     public static CourseModel getCourseByTitle(String courseTitle) {
-        if (courses==null)
-        {
-            courses = new ArrayList<>();
+        if (courses == null) {
+            // Load courses from CSV if not already loaded
+            courses = CSVHandler.loadCoursesFromCsv("courses.csv");
         }
-        return courses.stream().filter(course -> course.getCourseTitle().equals(courseTitle)).findFirst().orElse(null);
+        courses = CSVHandler.loadCoursesFromCsv("courses.csv");
+
+        System.out.println(courses);
+
+        return courses.stream()
+                .filter(course -> course.getCourseTitle().equals(courseTitle))
+                .findFirst()
+                .orElse(null);
     }
+
 
     // Track and manage class assignments
     public void addAssignmentForCourse(Assignment assignment, CourseModel course) {

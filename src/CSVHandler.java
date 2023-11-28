@@ -6,13 +6,18 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.HashMap;
+
 
 public class CSVHandler {
+    private static Map<String, List<CourseModel>> departmentMap = new LinkedHashMap<>();
 
-    public static void writeCoursesToCsv(List<CourseModel> courses, String csvFilePath) {
+    public static void writeCoursesToCsv(CourseModel course, String csvFilePath) {
         try (FileWriter writer = new FileWriter(csvFilePath,true)) {
             File file = new File("courses.csv");
 
@@ -21,7 +26,7 @@ public class CSVHandler {
                 writer.write("CourseTitle,CourseSubject,Department,Instructor,Content,Level,Schedule\n");
             }
             // Write each course to CSV
-            for (CourseModel course : courses) {
+           // for (CourseModel course : courses) {
                 writer.append(String.format("%s,%s,%s,%s,%s,%d,%s\n",
                         course.getCourseTitle(),
                         course.getCourseSubject(),
@@ -30,7 +35,7 @@ public class CSVHandler {
                         course.getContent(),
                         course.getLevel(),
                         course.getSchedule().toString()));
-            }
+           // }
 
             System.out.println("Courses written to CSV successfully.");
         } catch (IOException e) {
@@ -222,7 +227,53 @@ public class CSVHandler {
     }
 
 
-    public static void loadCoursesFromCsv(String csvFilePath, ArrayList<CourseModel> courses) {
+    public static ArrayList<CourseModel> loadCoursesFromCsv(String csvFilePath) {
+        Map<String, List<CourseModel>> departmentMap = new LinkedHashMap<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
+            // Skip the header row
+            reader.readLine();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Split the line into individual fields
+                String[] fields = line.split(",");
+
+                // Extract information from fields
+                String department = fields[2];
+                String courseTitle = fields[0];
+                String courseSubject = fields[1];
+                String instructorName = fields[3];
+                InstructorModel instructor = new InstructorModel(instructorName);
+                String content = fields[4];
+                int level = Integer.parseInt(fields[5]);
+                String schedule = fields[6];
+                String[] scheduleParts = schedule.split("at");
+                String day = scheduleParts[0].trim();
+                int time = Integer.parseInt(scheduleParts[1].trim());
+                Schedule courseSchedule = new Schedule(day, time);
+
+                // Create a CourseModel object
+                CourseModel course = new CourseModel(courseTitle, courseSubject, department, instructor, content, level, courseSchedule);
+
+                // Add the CourseModel object to the departmentMap
+                departmentMap.computeIfAbsent(department, k -> new ArrayList<>()).add(course);
+            }
+        } catch (IOException e) {
+            // Handle the exception (e.g., log an error)
+            e.printStackTrace();
+        }
+
+        // Combine all courses from the departmentMap into a single list
+        ArrayList<CourseModel> courses = new ArrayList<>();
+        departmentMap.values().forEach(courses::addAll);
+
+        return courses;
+    }
+
+    public static Map<String, List<CourseModel>> loadCoursesByDepartmentFromCsv(String csvFilePath) throws IOException {
+        Map<String, List<CourseModel>> coursesByDepartment = new HashMap<>();
+
         try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
             // Skip the header row
             reader.readLine();
@@ -244,19 +295,21 @@ public class CSVHandler {
                 String[] scheduleParts = schedule.split("at");
                 String day = scheduleParts[0].trim();
                 int time = Integer.parseInt(scheduleParts[1].trim());
-                Schedule x = new Schedule(day, time);
+                Schedule courseSchedule = new Schedule(day, time);
 
                 // Create a CourseModel object
-                CourseModel course = new CourseModel(courseTitle, courseSubject, department, instructor, content, level, x);
+                CourseModel course = new CourseModel(courseTitle, courseSubject, department, instructor, content, level, courseSchedule);
 
-                // Add the CourseModel object to the courses list
-                courses.add(course);
+
+                // Add the CourseModel object to the coursesByDepartment map
+                coursesByDepartment.computeIfAbsent(department, k -> new ArrayList<>()).add(course);
             }
-        } catch (IOException e) {
-            // Handle the exception (e.g., log an error)
-            e.printStackTrace();
         }
+
+        return coursesByDepartment;
     }
+
+
 
 
 }
