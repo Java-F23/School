@@ -8,10 +8,7 @@ import javax.swing.JOptionPane;
 public class AdministratorModel {
     private static ArrayList<CourseModel> courses;
     private  ArrayList<InstructorModel> instructors;
-
-
-
-    private static Map<String, List<CourseModel>> coursesByDepartment;
+    private static Map<String, ArrayList<CourseModel>> coursesByDepartment;
     private Map<String, List<StudentModel>> studentEnrollment; // the key is course name and includes students enrolled in it
     private Map<String, List<Assignment>> classAssignments;
     private Map<String, List<String>> calendarEvents;
@@ -33,7 +30,9 @@ public class AdministratorModel {
     public  ArrayList<CourseModel> getCourses() {
         return courses;
     }
-
+    public static Map<String, ArrayList<CourseModel>> getCoursesByDepartment() {
+        return coursesByDepartment;
+    }
     // Add a new course
     public static void addNewCourse(CourseModel course) {
         try {
@@ -95,6 +94,7 @@ public class AdministratorModel {
 
             // Remove the course if validation passes
             courses.remove(courseToRemove);
+            coursesByDepartment.remove(courseToRemove);
 
             // Remove the course from the CSV file
             CSVHandler.removeCourseFromCsv(courseToRemove, "courses.csv");

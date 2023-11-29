@@ -36,6 +36,8 @@ public class AdministratorControl {
         // Create and return a CourseModel object with the collected details
         CourseModel newCourse= new CourseModel(courseTitle, courseSubject, department, courseInstructor, content, level, newcourseSchedule);
         adminModel.addNewCourse(newCourse);
+        AdministratorView.isCoursesByDepartmentOpen=false;
+
     }
     public static void editExistingCourse() {
         try {
@@ -70,6 +72,7 @@ public class AdministratorControl {
 
             // Edit the existing course
             adminModel.editExistingCourse(oldCourseTitle, newCourse);
+            AdministratorView.isCoursesByDepartmentOpen=false;
 
         } catch (ExceptionHandling.CourseNotFoundException e) {
             ExceptionHandling.handleCourseNotFoundException(e.getMessage());
@@ -106,6 +109,7 @@ public class AdministratorControl {
 
             // Enroll the student in the course
             adminModel.enrollStudentInCourse(studentModel, course);
+            AdministratorView.isCoursesByDepartmentOpen=false;
 
 
         } catch (ExceptionHandling.CourseNotFoundException e) {
@@ -136,6 +140,7 @@ public class AdministratorControl {
 
             // Display success message
             JOptionPane.showMessageDialog(null, "Course '" + courseTitleToRemove + "' removed successfully.");
+            AdministratorView.isCoursesByDepartmentOpen=false;
 
         } catch (ExceptionHandling.CourseNotFoundException e) {
             ExceptionHandling.handleCourseNotFoundException(e.getMessage());
@@ -144,15 +149,7 @@ public class AdministratorControl {
         }
     }
 
-    public static Map<String, ArrayList<CourseModel>> loadCoursesByDepartment() {
-        try {
-            return CSVHandler.loadCoursesByDepartmentFromCsv("courses_by_department.csv");
-        } catch (IOException e) {
-            // Handle the exception (e.g., log an error)
-            e.printStackTrace();
-            return new HashMap<>();
-        }
-    }
+
 
 
 

@@ -1,3 +1,5 @@
+import com.sun.jdi.ArrayReference;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -6,7 +8,12 @@ import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import java.time.LocalDate;
 import java.util.Map;
+import java.io.IOException;
+
 public class AdministratorView extends JFrame {
+
+
+    public static boolean isCoursesByDepartmentOpen = false; // Flag to track whether the courses by department window is open
     private JMenuBar menuBar;
     private JMenu menu;
     private JButton logoutButton;
@@ -77,42 +84,126 @@ public class AdministratorView extends JFrame {
         JMenuItem addRemoveInstructorItem = new JMenuItem("Add or remove an instructor");
         instructorsMenu.add(addRemoveInstructorItem);
         setVisible(true);
-
+//        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+//            @Override
+//            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+//                isCoursesByDepartmentOpen = false; // Reset the flag when the window is closed
+//            }
+//        });
         addCourseItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AdministratorControl.addNewCourse(); // Delegate to the controller
+                if (!isCoursesByDepartmentOpen) {
+                    isCoursesByDepartmentOpen = true;
+                    AdministratorControl.addNewCourse(); // Delegate to the controller
+                } else {
+                    JOptionPane.showMessageDialog(null, "Another window is already open.");
+                }
             }
         });
         Enroll_student.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AdministratorControl.enrollStudent(); // Delegate to the controller
+                if (!isCoursesByDepartmentOpen) {
+                    isCoursesByDepartmentOpen = true;
+                    AdministratorControl.enrollStudent(); // Delegate to the controller
+                } else {
+                    JOptionPane.showMessageDialog(null, "Another window is already open.");
+                }
             }
         });
         editCourseItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AdministratorControl.editExistingCourse(); // Delegate to the controller
+                if (!isCoursesByDepartmentOpen) {
+                    isCoursesByDepartmentOpen = true;
+                    AdministratorControl.editExistingCourse(); // Delegate to the controller
+                } else {
+                    JOptionPane.showMessageDialog(null, "Another window is already open.");
+                }
             }
         });
         removeCourse.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AdministratorControl.removeCourse(); // Delegate to the controller
+                if (!isCoursesByDepartmentOpen) {
+                    isCoursesByDepartmentOpen = true;
+                    AdministratorControl.removeCourse(); // Delegate to the controller
+                } else {
+                    JOptionPane.showMessageDialog(null, "Another window is already open.");
+                }
             }
         });
 
         categorizeCoursesItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              //  AdministratorControl.addToDepartmentMap();
+                if (!isCoursesByDepartmentOpen) {
+                    isCoursesByDepartmentOpen = true;
+                    displayCoursesByDepartment(AdministratorModel.getCoursesByDepartment());
+                } else {
+                    JOptionPane.showMessageDialog(null, "Courses by department window is already open.");
+                }
             }
         });
     }
 
     public static void displayCourseAddedMessage(String courseTitle) {
         JOptionPane.showMessageDialog(null, "Course '" + courseTitle + "' added successfully!");
-    }
 
+    }
+    public static void displayCoursesByDepartment(Map<String, ArrayList<CourseModel>> coursesByDepartment) {
+        try {
+            coursesByDepartment = CSVHandler.loadCoursesByDepartmentFromCsv("courses_by_department.csv");
+
+            JFrame frame = new JFrame("Courses by Department");
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+
+            DefaultTableModel model = new DefaultTableModel() {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    // Make cells non-editable
+                    return false;
+                }
+            };
+
+            JTable table = new JTable(model);
+
+            // Add columns to the table
+            model.addColumn("Department");
+            model.addColumn("Course Title");
+
+            // Add data to the table
+            for (Map.Entry<String, ArrayList<CourseModel>> entry : coursesByDepartment.entrySet()) {
+                String department = entry.getKey();
+                ArrayList<CourseModel> courses = entry.getValue();
+
+                for (CourseModel course : courses) {
+                    model.addRow(new Object[]{department, course.getCourseTitle()});
+                }
+            }
+
+            JScrollPane scrollPane = new JScrollPane(table);
+            frame.add(scrollPane);
+
+            // Set the size of the frame
+            frame.setSize(600, 400);
+
+            // Center the frame on the screen
+            frame.setLocationRelativeTo(null);
+
+            frame.setVisible(true);
+
+            frame.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                   isCoursesByDepartmentOpen = false; // Reset the flag when the window is closed
+                }
+            });
+        } catch (IOException e) {
+            // Handle the exception, e.g., log it or show an error message
+            e.printStackTrace();
+        }
+    }
 }

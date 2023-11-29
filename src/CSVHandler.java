@@ -119,7 +119,7 @@ public class CSVHandler {
     }
     // Add this method to save courses by department to a CSV file
     // Updated method without importing BufferedWriter
-    public static void saveCoursesByDepartmentToCSV(Map<String, List<CourseModel>> coursesByDepartment, String filePath) {
+    public static void saveCoursesByDepartmentToCSV(Map<String, ArrayList<CourseModel>> coursesByDepartment, String filePath) {
         try (FileWriter writer = new FileWriter(filePath,true)) {
 
                 // Write header
@@ -130,7 +130,7 @@ public class CSVHandler {
                 writer.write("Department,CourseTitle,CourseSubject,Instructor,Content,Level,Schedule\n");
             }
             // Write data
-            for (Map.Entry<String, List<CourseModel>> entry : coursesByDepartment.entrySet()) {
+            for (Map.Entry<String, ArrayList<CourseModel>> entry : coursesByDepartment.entrySet()) {
                 String department = entry.getKey();
                 for (CourseModel course : entry.getValue()) {
                     String line = String.format("%s,%s,%s,%s,%s,%d,%s\n",
@@ -150,7 +150,7 @@ public class CSVHandler {
     }
     // Add this new method to update the department map in the CSV file
     // Updated method to update the department map in the CSV file
-    public static void updateDepartmentMapInCSV(Map<String, List<CourseModel>> coursesByDepartment, String oldDepartment, CourseModel oldCourse, String newDepartment, CourseModel newCourse, String filePath) {
+    public static void updateDepartmentMapInCSV(Map<String, ArrayList<CourseModel>> coursesByDepartment, String oldDepartment, CourseModel oldCourse, String newDepartment, CourseModel newCourse, String filePath) {
         try (FileWriter writer = new FileWriter(filePath,true)) {
             // Write header
             File file = new File("courses_by_department.csv");
@@ -160,7 +160,7 @@ public class CSVHandler {
                 writer.write("Department,CourseTitle,CourseSubject,Instructor,Content,Level,Schedule\n");
             }
             // Write data
-            for (Map.Entry<String, List<CourseModel>> entry : coursesByDepartment.entrySet()) {
+            for (Map.Entry<String, ArrayList<CourseModel>> entry : coursesByDepartment.entrySet()) {
                 String department = entry.getKey();
                 for (CourseModel course : entry.getValue()) {
                     // Check if the course matches the old course and update the department
@@ -271,8 +271,8 @@ public class CSVHandler {
         return courses;
     }
 
-    public static Map<String, List<CourseModel>> loadCoursesByDepartmentFromCsv(String csvFilePath) throws IOException {
-        Map<String, List<CourseModel>> coursesByDepartment = new HashMap<>();
+    public static Map<String, ArrayList<CourseModel>> loadCoursesByDepartmentFromCsv(String csvFilePath) throws IOException {
+        Map<String, ArrayList<CourseModel>> coursesByDepartment = new HashMap<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
             // Skip the header row
