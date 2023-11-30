@@ -44,7 +44,7 @@ public class LoginFrame extends JFrame {
 
                     if (isValidName(name)) {
                         if (studentButton.isSelected()) {
-                            StudentWelcomeFrame studentWelcome = new StudentWelcomeFrame(name);
+                            StudentView studentWelcome = new StudentView(name);
                            // studentWelcome.setVisible(true);
                             dispose();
                         } else if (adminButton.isSelected()) {
@@ -82,15 +82,11 @@ public class LoginFrame extends JFrame {
         mainpanel.add(topPanel, BorderLayout.NORTH);
         mainpanel.add(centerPanel, BorderLayout.CENTER);
         mainpanel.add(loginButton, BorderLayout.SOUTH);
-
         add(mainpanel);
 
         //To disable minimization or maximization
         setResizable(false);
         setVisible(true);
-
-
-
     }
 
     //Check if the name is valid or not

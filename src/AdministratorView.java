@@ -84,12 +84,7 @@ public class AdministratorView extends JFrame {
         JMenuItem addRemoveInstructorItem = new JMenuItem("Add or remove an instructor");
         instructorsMenu.add(addRemoveInstructorItem);
         setVisible(true);
-//        frame.addWindowListener(new java.awt.event.WindowAdapter() {
-//            @Override
-//            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-//                isCoursesByDepartmentOpen = false; // Reset the flag when the window is closed
-//            }
-//        });
+
         addCourseItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

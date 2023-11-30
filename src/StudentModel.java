@@ -9,16 +9,22 @@ public class StudentModel {
     private String name;
     private List<CourseModel> courseList;
     private List<CourseModel> favoriteCourses;
-    private List<StudentModel> students;
+    private ArrayList<StudentModel> students;
     private BigDecimal GPA;
     private List<CourseModel> pastCourses;
     private Map<String, List<String>> calendarEvents;
+
     public StudentModel() {
+
         this.courseList = new ArrayList<>();
+        this.students = new ArrayList<>();
         this.favoriteCourses = new ArrayList<>();
         this.GPA = BigDecimal.ZERO; // Initial GPA is zero
     }
-
+    // Getters and setters
+    public ArrayList<StudentModel> getStudents() {
+        return students;
+    }
     // Methods for browsing, searching, and viewing courses
     public List<String> browseCourses(List<CourseModel> allCourses) {
         List<String> courseTitles = new ArrayList<>();
