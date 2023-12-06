@@ -91,6 +91,6 @@ public class StudentControl {
         }
     }
 
-
+//add method for mark course as favourite
 
 }

@@ -125,6 +125,13 @@ public class StudentView {
                 outputTextArea.setText("Viewing course schedule:\n" + coursesText);
             }
         });
+        markAsFavoriteItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                outputTextArea.setFont(outputTextArea.getFont().deriveFont(Font.BOLD));
+                outputTextArea.setText("Mark course as favourite :\n" );
+            }
+        });
     }
 
     // Method to display messages in the output text area
