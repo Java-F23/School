@@ -14,12 +14,16 @@ public class StudentModel {
     private List<CourseModel> pastCourses;
     private Map<String, List<String>> calendarEvents;
 
-    public StudentModel() {
+    private AdministratorModel adminModel;
 
+
+    public StudentModel() {
         this.courseList = new ArrayList<>();
         this.students = new ArrayList<>();
         this.favoriteCourses = new ArrayList<>();
         this.GPA = BigDecimal.ZERO; // Initial GPA is zero
+        this.adminModel = adminModel;
+
     }
     // Getters and setters
     public ArrayList<StudentModel> getStudents() {
@@ -65,6 +69,7 @@ public class StudentModel {
             courseDetails.append("Error: ").append(e.getMessage());
         }
     }
+
 
     public String viewCourseSchedule(CourseModel course) {
         StringBuilder courseSchedule = new StringBuilder();

@@ -1,12 +1,15 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Font;
 import java.util.ArrayList;
 
 // StudentView.java
 public class StudentView {
     private JFrame frame;
     private JTextArea outputTextArea;
+    private AdministratorModel adminModel;
+
     // Constructor
     public StudentView(String name) {
         frame = new JFrame("Student View");
@@ -15,6 +18,11 @@ public class StudentView {
 
         outputTextArea = new JTextArea();
         outputTextArea.setEditable(false);
+        frame.setVisible(true);
+        frame.setResizable(false);
+
+        // Center the frame on the screen
+        frame.setLocationRelativeTo(null);
 
         JScrollPane scrollPane = new JScrollPane(outputTextArea);
         frame.add(scrollPane);
@@ -71,58 +79,57 @@ public class StudentView {
         gradesMenu.add(viewClassGradesItem);
         gradesMenu.add(viewPastClassesItem);
 
-        // Set up action listeners for menu items
-        browseCoursesItem.addActionListener(e -> displayMessage("Browsing List of Current Courses"));
-
         browseCoursesItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                browseCurrentCourses();
+                String coursesText = StudentControl.browseCurrentCourses();
+                // Update the view to display current courses
+                outputTextArea.setFont(outputTextArea.getFont().deriveFont(Font.BOLD));
+                outputTextArea.setText("Browsing List of Current Courses:\n" + coursesText);
             }
         });
-        searchCourseItem.addActionListener(e -> displayMessage("Searching for a Course"));
-        viewCourseDetailsItem.addActionListener(e -> displayMessage("Viewing Details for a Course"));
-        viewCourseScheduleItem.addActionListener(e -> displayMessage("Viewing Schedule for a Course"));
+        searchCourseItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Prompt the user for input
+                String courseName = JOptionPane.showInputDialog(frame, "Enter the course name:");
 
-        markAsFavoriteItem.addActionListener(e -> displayMessage("Marking a Course as Favorite"));
-        showFavoritesItem.addActionListener(e -> displayMessage("Showing My Favorite Courses List"));
+                // Check if the user entered a course name
+                if (courseName != null && !courseName.isEmpty()) {
+                    // Call the method to display course details by name
+                    String courseDetails = StudentControl.displayCourseDetailsByName(courseName);
 
-        enrollInClassItem.addActionListener(e -> displayMessage("Enrolling in a Class"));
-        printMyCoursesItem.addActionListener(e -> displayMessage("Printing My Courses"));
+                    // Update the view to display course details
+                    outputTextArea.setFont(outputTextArea.getFont().deriveFont(Font.BOLD));
+                    outputTextArea.setText("Searching for a course:\n" + courseDetails);
+                } else {
+                    // User canceled or entered an empty string
+                    outputTextArea.setText("Search canceled or empty course name.");
+                }
+            }
+        });
 
-        viewClassGradesItem.addActionListener(e -> displayMessage("Viewing Class Grades"));
-        viewPastClassesItem.addActionListener(e -> displayMessage("Accessing Past Classes Schedule and Performance Records"));
-
-        frame.setVisible(true);
-        // Make the frame non-resizable
-        frame.setResizable(false);
-        frame.setVisible(true);
+        viewCourseDetailsItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String coursesText = StudentControl.browseAllCourseDetails();
+                outputTextArea.setFont(outputTextArea.getFont().deriveFont(Font.BOLD));
+                outputTextArea.setText("Viewing course schedule:\n" + coursesText);
+            }
+        });
+        viewCourseScheduleItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String coursesText = StudentControl.browseCourseSchedules();
+                outputTextArea.setFont(outputTextArea.getFont().deriveFont(Font.BOLD));
+                outputTextArea.setText("Viewing course schedule:\n" + coursesText);
+            }
+        });
     }
 
     // Method to display messages in the output text area
     private void displayMessage(String message) {
         outputTextArea.append(message + "\n");
     }
-
-    // Method to display current courses in the GUI
-    public void displayCurrentCourses(String courses) {
-        outputTextArea.setText(courses);
-    }
-
-    // Method to display current courses in a new frame
-    private void browseCurrentCourses() {
-        // Get the list of courses from the AdministratorModel
-        ArrayList<CourseModel> courses = adminModel.getCourses();
-
-        // Display courses in the view
-        StringBuilder coursesText = new StringBuilder();
-        for (int i = 0; i < courses.size(); i++) {
-            coursesText.append(i + 1).append(". ").append(courses.get(i).getCourseTitle()).append("\n");
-        }
-
-        // Update the view to display current courses
-        displayCurrentCourses(coursesText.toString());
-    }
-
 
 }
